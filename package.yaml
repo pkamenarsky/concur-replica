@@ -1,0 +1,76 @@
+name: concur-replica
+version: '0.1.0.0'
+synopsis: Replica backend for Concur.
+description: Replica backend for Concur.
+category: Web
+author: Philip Kamenarsky
+maintainer: p.kamenarsky@gmail.com
+copyright: 2019 (C) All Rights Reserved.
+license: BSD3
+github: pkamenarsky/concur-replica
+extra-source-files:
+- README.md
+ghc-options:
+- -w
+- -ferror-spans
+dependencies:
+- base >=4.7 && <5
+- aeson
+- bytestring
+- containers
+- concur-core
+- free >=4.12
+- replica
+- text
+- transformers >=0.5
+- wai
+- wai-websockets
+- websockets
+- warp
+library:
+  source-dirs: src
+  ghc-options:
+  - -w
+  - -ferror-spans
+  - -Wincomplete-uni-patterns
+  - -Wincomplete-record-updates
+  - -Wmissing-import-lists
+  exposed-modules:
+  - Concur.Replica
+  - Concur.Replica.DOM
+  - Concur.Replica.Props
+  - Concur.Replica.Events
+  - Concur.Replica.Run
+executables:
+  concur-replica-calc:
+    main: Main.hs
+    source-dirs: examples/Calc
+    dependencies:
+    - concur-replica
+    - text
+  concur-replica-misc:
+    main: Main.hs
+    source-dirs: examples/Misc
+    dependencies:
+    - concur-replica
+    - text
+  concur-replica-hilo:
+    main: Main.hs
+    source-dirs: examples/HiLo
+    dependencies:
+    - concur-replica
+    - random
+    - text
+  concur-replica-menu:
+    main: Main.hs
+    source-dirs: examples/Menu
+    dependencies:
+    - concur-replica
+    - text
+  concur-replica-multi-entry:
+    main: Main.hs
+    source-dirs: examples/MultiEntry
+    dependencies:
+    - concur-replica
+    - mtl
+    - text

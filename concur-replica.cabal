@@ -1,0 +1,177 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.1.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 20c6f76b52cd574b5ba22a2edd6df971648c456041bbd3db22679b41f09b92db
+
+name:           concur-replica
+version:        0.1.0.0
+synopsis:       Replica backend for Concur.
+description:    Replica backend for Concur.
+category:       Web
+homepage:       https://github.com/pkamenarsky/concur-replica#readme
+bug-reports:    https://github.com/pkamenarsky/concur-replica/issues
+author:         Philip Kamenarsky
+maintainer:     p.kamenarsky@gmail.com
+copyright:      2019 (C) All Rights Reserved.
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/pkamenarsky/concur-replica
+
+library
+  exposed-modules:
+      Concur.Replica
+      Concur.Replica.DOM
+      Concur.Replica.Props
+      Concur.Replica.Events
+      Concur.Replica.Run
+  other-modules:
+      Paths_concur_replica
+  hs-source-dirs:
+      src
+  ghc-options: -w -ferror-spans -w -ferror-spans -Wincomplete-uni-patterns -Wincomplete-record-updates -Wmissing-import-lists
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , concur-core
+    , containers
+    , free >=4.12
+    , replica
+    , text
+    , transformers >=0.5
+    , wai
+    , wai-websockets
+    , warp
+    , websockets
+  default-language: Haskell2010
+
+executable concur-replica-calc
+  main-is: Main.hs
+  other-modules:
+      Paths_concur_replica
+  hs-source-dirs:
+      examples/Calc
+  ghc-options: -w -ferror-spans
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , concur-core
+    , concur-replica
+    , containers
+    , free >=4.12
+    , replica
+    , text
+    , transformers >=0.5
+    , wai
+    , wai-websockets
+    , warp
+    , websockets
+  default-language: Haskell2010
+
+executable concur-replica-hilo
+  main-is: Main.hs
+  other-modules:
+      Paths_concur_replica
+  hs-source-dirs:
+      examples/HiLo
+  ghc-options: -w -ferror-spans
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , concur-core
+    , concur-replica
+    , containers
+    , free >=4.12
+    , random
+    , replica
+    , text
+    , transformers >=0.5
+    , wai
+    , wai-websockets
+    , warp
+    , websockets
+  default-language: Haskell2010
+
+executable concur-replica-menu
+  main-is: Main.hs
+  other-modules:
+      Paths_concur_replica
+  hs-source-dirs:
+      examples/Menu
+  ghc-options: -w -ferror-spans
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , concur-core
+    , concur-replica
+    , containers
+    , free >=4.12
+    , replica
+    , text
+    , transformers >=0.5
+    , wai
+    , wai-websockets
+    , warp
+    , websockets
+  default-language: Haskell2010
+
+executable concur-replica-misc
+  main-is: Main.hs
+  other-modules:
+      Paths_concur_replica
+  hs-source-dirs:
+      examples/Misc
+  ghc-options: -w -ferror-spans
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , concur-core
+    , concur-replica
+    , containers
+    , free >=4.12
+    , replica
+    , text
+    , transformers >=0.5
+    , wai
+    , wai-websockets
+    , warp
+    , websockets
+  default-language: Haskell2010
+
+executable concur-replica-multi-entry
+  main-is: Main.hs
+  other-modules:
+      Paths_concur_replica
+  hs-source-dirs:
+      examples/MultiEntry
+  ghc-options: -w -ferror-spans
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , concur-core
+    , concur-replica
+    , containers
+    , free >=4.12
+    , mtl
+    , replica
+    , text
+    , transformers >=0.5
+    , wai
+    , wai-websockets
+    , warp
+    , websockets
+  default-language: Haskell2010
