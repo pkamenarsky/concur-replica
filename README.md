@@ -11,7 +11,7 @@
 
 module Main where
 
-import Concur.Core (Widget, orr)
+import Concur.Core
 import Concur.Replica
 
 import Prelude hiding (div)
@@ -41,4 +41,4 @@ stack build
 stack exec concur-replica-(calc|hilo|menu|misc|multi-entry)
 ```
 
-Point your browser at `http://localhost:8080` and behold the godly combination of **Concur**rent, **Replica**ted remote VDOM goodness 🤘.
+Point your browser at `http://localhost:8080` and behold the remote VDOM goodness.
