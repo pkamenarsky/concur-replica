@@ -1,6 +1,6 @@
 # concur-replica
 
-`concur-replica` is a [Concur](https://github.com/ajnsit/concur) backend for [Replica](https://github.com/pkamenarsky/replica). As such, you should make yourself familiar with both the [https://github.com/ajnsit/concur-documentation/blob/master/README.md](Concur docs) and (Replica docs)[https://github.com/pkamenarsky/replica/blob/master/README.md] first.
+`concur-replica` is a [Concur](https://github.com/ajnsit/concur) backend for [Replica](https://github.com/pkamenarsky/replica). As such, you should make yourself familiar with both the [Concur docs](https://github.com/ajnsit/concur-documentation/blob/master/README.md) and [Replica docs](https://github.com/pkamenarsky/replica/blob/master/README.md) first.
 
 ## Obligatory counter example
 
