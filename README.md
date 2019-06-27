@@ -16,8 +16,8 @@ import Prelude hiding (div)
 
 counter :: Int -> Widget HTML a
 counter x = do
-  click <- div [ className "test" ]
-    [ Left <$> div [ onClick ] [ text "-" ]
+  click <- div []
+    [ Left  <$> div [ onClick ] [ text "-" ]
     , text $ T.pack $ show x
     , Right <$> div [ onClick ] [ text "+" ]
     ]
@@ -36,9 +36,7 @@ The examples are mostly taken from `concur-react`, but there are some new ones a
 
 ```
 stack build
-
 stack exec concur-replica-(calc|hilo|menu|misc|multi-entry)
-
 ```
 
-Point your browser at `http://localhost:8080` and behold the godly combination of *Concur*rent, *Rplica*ted remote VDOM goodness 🤘.
+Point your browser at `http://localhost:8080` and behold the godly combination of **Concur**rent, **Replica**ted remote VDOM goodness 🤘.
