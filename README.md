@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/pkamenarsky/concur-replica.svg?style=svg)](https://circleci.com/gh/pkamenarsky/concur-replica)
 
-`concur-replica` is a [Concur](https://github.com/ajnsit/concur) backend for [Replica](https://github.com/pkamenarsky/replica). As such, you should make yourself familiar with both the [Concur docs](https://github.com/ajnsit/concur-documentation/blob/master/README.md) and [Replica docs](https://github.com/pkamenarsky/replica/blob/master/README.md) first.
+`concur-replica` is a [Concur](https://github.com/ajnsit/concur) backend for [Replica](https://github.com/pkamenarsky/replica). As such, you should make yourself familiar with both projects first.
 
 ## Obligatory counter example
 
