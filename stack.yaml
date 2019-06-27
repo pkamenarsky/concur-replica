@@ -4,7 +4,7 @@ packages:
 extra-deps:
 - natural-transformation-0.4
 - git: https://github.com/pkamenarsky/replica.git
-  commit: 82a630514c08ed4ed42fdad5da936c57111fa905
+  commit: e25b02c95defc5cdab4689842c46c94865a703fe
 - git: https://github.com/pkamenarsky/concur.git
   commit: 6c6bcc07b2688182945b28f154a013eee3f624c5
   subdirs:
