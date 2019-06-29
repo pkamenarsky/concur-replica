@@ -4,12 +4,10 @@ packages:
 extra-deps:
 - natural-transformation-0.4
 - git: https://github.com/pkamenarsky/replica.git
-  commit: e25b02c95defc5cdab4689842c46c94865a703fe
+  commit: d26b1ccc8f2df178dda89ec9ed289e88faea11a3
 - git: https://github.com/pkamenarsky/concur.git
   commit: 6c6bcc07b2688182945b28f154a013eee3f624c5
   subdirs:
     - concur-core
-# - vendor/replica
-# - vendor/concur-core
 flags: {}
 extra-package-dbs: []
