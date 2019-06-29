@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/pkamenarsky/concur-replica.svg?style=svg)](https://circleci.com/gh/pkamenarsky/concur-replica)
 
-`concur-replica` is a [Concur](https://github.com/ajnsit/concur) backend for [Replica](https://github.com/pkamenarsky/replica). As such, you should make yourself familiar with both projects first.
+`concur-replica` is a [Concur](https://github.com/ajnsit/concur) backend for [Replica](https://github.com/pkamenarsky/replica). As such, you might want to make yourself familiar with both projects first.
 
 ## Obligatory counter example
 
@@ -34,11 +34,11 @@ main = runDefault 8080 "Counter" (counter 0)
 
 ## Running the examples
 
-The examples are mostly taken from `concur-react`, but there are some new ones as well under `examples/Misc`.
+The examples are mostly taken from `concur-react`, but there are a couple of new ones ones under `examples/Misc` as well.
 
 ```
 stack build
 stack exec concur-replica-(calc|hilo|menu|misc|multi-entry)
 ```
 
-Point your browser at `http://localhost:8080` and behold the remote VDOM goodness.
+Point your browser to `http://localhost:8080` and behold the remote VDOM goodness.
