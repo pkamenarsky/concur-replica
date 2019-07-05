@@ -33,7 +33,7 @@ data BaseEvent = BaseEvent
   , defaultPrevented :: !Bool
   , eventPhase       :: !Int
   , target           :: !Target
-  , timeStamp        :: !Int
+  , timeStamp        :: !Double
   , eventType        :: !T.Text
   , isTrusted        :: !Bool
   }
