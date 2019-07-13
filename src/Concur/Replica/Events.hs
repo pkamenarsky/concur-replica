@@ -9,7 +9,7 @@ import qualified Data.Aeson               as A
 
 import qualified Data.Text                as T
 
-import           Replica.VDOM             (DOMEvent(getDOMEvent))
+import           Replica.VDOM.Types       (DOMEvent(getDOMEvent))
 
 -- TODO: return Maybe here
 extractResult :: A.Result a -> a

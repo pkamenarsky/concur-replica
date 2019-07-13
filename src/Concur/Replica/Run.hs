@@ -18,13 +18,16 @@ import qualified Data.Text.Encoding              as TE
 import           Unsafe.Coerce                   (unsafeCoerce)
 
 import qualified Replica.VDOM                    as V
-import           Replica.VDOM                    (DOMEvent(DOMEvent), HTML, fireEvent)
+import           Replica.VDOM                    (fireEvent, defaultIndex)
+import           Replica.VDOM.Types              (DOMEvent(DOMEvent), HTML)
 
 import           Network.WebSockets.Connection   (ConnectionOptions, defaultConnectionOptions)
 import qualified Network.Wai.Handler.Replica     as R
 import qualified Network.Wai.Handler.Warp        as W
 
-stepWidget :: Free (SuspendF HTML) a -> IO (Maybe (HTML, (Free (SuspendF HTML) a), R.Event -> IO ()))
+import           Debug.Trace
+
+stepWidget :: Free (SuspendF HTML) a -> IO (Maybe (HTML, (Free (SuspendF HTML) a), R.Event -> Maybe (IO ())))
 stepWidget v = case v of
   Pure a                   -> pure Nothing
   Free (StepView new next) -> pure $ Just (new, next, \event -> fireEvent new (R.evtPath event) (R.evtType event) (DOMEvent $ R.evtEvent event))
@@ -32,12 +35,12 @@ stepWidget v = case v of
   Free (StepBlock io next) -> io >>= stepWidget . next
   Free Forever             -> pure Nothing
 
-run :: Int -> T.Text -> ConnectionOptions -> Widget HTML a -> IO ()
-run port title connectionOptions widget
+run :: Int -> HTML -> ConnectionOptions -> Widget HTML a -> IO ()
+run port index connectionOptions widget
   = W.run port
-  $ R.app (TE.encodeUtf8 title) connectionOptions (step widget) stepWidget
+  $ R.app index connectionOptions (step widget) stepWidget
 
 runDefault :: Int -> T.Text -> Widget HTML a -> IO ()
 runDefault port title widget
   = W.run port
-  $ R.app (TE.encodeUtf8 title) defaultConnectionOptions (step widget) stepWidget
+  $ R.app (defaultIndex title []) defaultConnectionOptions (step widget) stepWidget

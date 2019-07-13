@@ -3,8 +3,10 @@ packages:
 - .
 extra-deps:
 - natural-transformation-0.4
+# - ./vendor/replica
+# - ./vendor/concur-core
 - git: https://github.com/pkamenarsky/replica.git
-  commit: d26b1ccc8f2df178dda89ec9ed289e88faea11a3
+  commit: 69249ec760b8b8272d302269b54ddc4531d508a9
 - git: https://github.com/pkamenarsky/concur.git
   commit: 6c6bcc07b2688182945b28f154a013eee3f624c5
   subdirs:

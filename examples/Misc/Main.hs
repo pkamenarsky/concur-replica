@@ -7,9 +7,12 @@ module Main where
 import           Data.Maybe (mapMaybe)
 import qualified Data.Text as T
 
+import           Control.Exception
+import           Control.Monad.IO.Class
 import           Concur.Core (Widget, orr)
 import           Concur.Replica
 
+import qualified Prelude as P
 import           Prelude hiding (div)
 
 data Todo = Todo
@@ -136,6 +139,43 @@ clientSidePredictionApp
 
 mouseEnterLeaveApp :: IO ()
 mouseEnterLeaveApp = runDefault 8080 "Mouse enter/leave test" mouseEnterLeave
+
+--------------------------------------------------------------------------------
+
+exWidget :: Widget HTML a
+exWidget = do
+  e <- div [ onClick ] [ text "BOOM" ]
+  a <- liftIO $ evaluate ((5 `P.div` 0))
+  text $ T.pack $ show "asd"
+  exWidget
+
+dispatch :: Widget HTML ()
+dispatch = do
+ div []
+   [ p [] [ text "Hello" ]
+   , button [ onClick ] [ text "Go next" ]
+   ]
+ c <- div []
+   [ p [] [ text "Choose" ]
+   , div []
+     [ button [ "a" <$ onClick ] [ text "a" ]
+     , button [ "b" <$ onClick ] [ text "b" ]
+     ]
+   ]
+ p [] [ text $ "You chose " <> c ]
+
+dispatch2 :: Widget HTML a
+dispatch2 = do
+    div []
+      [ p [] [ text "Hello" ]
+      , button [ onClick ] [ text "Go next" ]
+      ]
+    c <- div []
+      [ p [] [ text "Choose" ]
+      , button [ "a" <$ onClick ] [ text "a" ]
+      , button [ "b" <$ onClick ] [ text "b" ]
+      ]
+    p [] [ text $ "You chose " <> c ]
 
 --------------------------------------------------------------------------------
 
