@@ -22,6 +22,7 @@ import           Replica.VDOM                    (fireEvent, defaultIndex)
 import           Replica.VDOM.Types              (DOMEvent(DOMEvent), HTML)
 
 import           Network.WebSockets.Connection   (ConnectionOptions, defaultConnectionOptions)
+import           Network.Wai                     (Middleware)
 import qualified Network.Wai.Handler.Replica     as R
 import qualified Network.Wai.Handler.Warp        as W
 
@@ -35,12 +36,12 @@ stepWidget v = case v of
   Free (StepBlock io next) -> io >>= stepWidget . next
   Free Forever             -> pure Nothing
 
-run :: Int -> HTML -> ConnectionOptions -> Widget HTML a -> IO ()
-run port index connectionOptions widget
+run :: Int -> HTML -> ConnectionOptions -> Middleware -> Widget HTML a -> IO ()
+run port index connectionOptions middleware widget
   = W.run port
-  $ R.app index connectionOptions (step widget) stepWidget
+  $ R.app index connectionOptions middleware (step widget) stepWidget
 
 runDefault :: Int -> T.Text -> Widget HTML a -> IO ()
 runDefault port title widget
   = W.run port
-  $ R.app (defaultIndex title []) defaultConnectionOptions (step widget) stepWidget
+  $ R.app (defaultIndex title []) defaultConnectionOptions R.defaultMiddleware (step widget) stepWidget
