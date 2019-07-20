@@ -44,4 +44,4 @@ run port index connectionOptions middleware widget
 runDefault :: Int -> T.Text -> Widget HTML a -> IO ()
 runDefault port title widget
   = W.run port
-  $ R.app (defaultIndex title []) defaultConnectionOptions R.emptyMiddleware (step widget) stepWidget
+  $ R.app (defaultIndex title []) defaultConnectionOptions id (step widget) stepWidget
