@@ -1,8 +1,10 @@
-{-# LANGUAGE DeriveFunctor       #-}
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DeriveFunctor              #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE OverloadedStrings          #-}
 
 module Concur.Replica.Props where
 
+import qualified Data.Map                 as M
 import qualified Data.Text                as T
 
 import           Replica.VDOM             (DOMEvent)
@@ -11,23 +13,34 @@ data Prop a
   = PropText T.Text
   | PropBool Bool
   | PropEvent (DOMEvent -> a)
-  | PropMap [Props a]
+  | PropMap (Props a)
   deriving Functor
 
-data Props a = Props T.Text (Prop a)
-  deriving Functor
+instance Semigroup (Prop a) where
+  PropMap m <> PropMap n = PropMap (m <> n)
+  _ <> m = m
+
+newtype Props a = Props (M.Map T.Text (Prop a))
+  deriving (Functor, Monoid)
+
+instance Semigroup (Props a) where
+  Props m <> Props n = Props (M.unionWith (<>) m n)
+
+mkProp :: T.Text -> Prop a -> Props a
+mkProp k v = Props $ M.singleton k v
 
 boolProp :: T.Text -> Bool -> Props a
-boolProp k v = Props k (PropBool v)
+boolProp k v = mkProp k (PropBool v)
 
 textProp :: T.Text -> T.Text -> Props a
-textProp k v = Props k (PropText v)
+textProp k v = mkProp k (PropText v)
 
 key :: T.Text -> Props a
 key v = textProp "key" v
 
 style :: [(T.Text, T.Text)] -> Props a
-style m = Props "style" (PropMap [ Props k (PropText v) | (k, v) <- m ])
+style m = mkProp "style"
+  $ PropMap $ Props $ M.fromList [ (k, PropText v) | (k, v) <- m ]
 
 -- | Define multiple classes conditionally
 --

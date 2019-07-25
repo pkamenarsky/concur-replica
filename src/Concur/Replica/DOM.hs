@@ -13,7 +13,9 @@ import           Concur.Replica.Props     (Props(Props), Prop(PropText, PropBool
 import           Control.ShiftMap         (ShiftMap(shiftMap))
 
 import           Data.Monoid              ((<>))
+import           Data.List                (unzip)
 import qualified Data.Text                as T
+import           Data.Traversable         (sequenceA)
 
 import qualified Data.Map                 as M
 
@@ -22,19 +24,24 @@ import           Replica.VDOM             (Attr(AText, ABool, AEvent, AMap), HTM
 type WidgetConstraints m = (ShiftMap (Widget HTML) m, Monad m, MonadSafeBlockingIO m, MonadUnsafeBlockingIO m, MultiAlternative m)
 
 el :: forall m a. WidgetConstraints m => T.Text -> [Props a] -> [m a] -> m a
-el e attrs children = do
-  attrs' <- liftUnsafeBlockingIO $ mapM toAttr attrs
-  shiftMap (wrapView (VNode e (M.fromList $ fmap fst attrs'))) $ orr (children <> concatMap snd attrs')
+el e props children = do
+  (attrs, cs) <- liftUnsafeBlockingIO $ toAttrs (mconcat props)
+  shiftMap (wrapView $ VNode e attrs) $ orr (children <> cs)
   where
-    toAttr :: Props a -> IO ((T.Text, Attr), [m a])
-    toAttr (Props k (PropText v)) = pure ((k, AText v), [])
-    toAttr (Props k (PropBool v)) = pure ((k, ABool v), [])
-    toAttr (Props k (PropEvent extract)) = do
+    toAttrs :: Props a -> IO (M.Map T.Text Attr, [m a])
+    toAttrs (Props m) = do
+      (kvs, cs) <- unzip <$> sequenceA [ (\(v, cs) -> ((k, v), cs)) <$> toAttr v | (k, v) <- M.toList m ]
+      pure (M.fromList kvs, mconcat cs)
+
+    toAttr :: Prop a -> IO (Attr, [m a])
+    toAttr (PropText v) = pure (AText v, [])
+    toAttr (PropBool v) = pure (ABool v, [])
+    toAttr (PropEvent extract) = do
       n <- newEmptyMVar
-      pure ((k, AEvent $ putMVar n), [liftSafeBlockingIO (extract <$> takeMVar n)])
-    toAttr (Props k (PropMap m)) = do
-      m' <- mapM toAttr m
-      pure ((k, AMap $ M.fromList $ fmap fst m'), concatMap snd m')
+      pure (AEvent $ putMVar n, [liftSafeBlockingIO (extract <$> takeMVar n)])
+    toAttr (PropMap m) = do
+      (n, cs) <- toAttrs m
+      pure (AMap n, cs)
 
 text :: T.Text -> Widget HTML a
 text txt = display [VText txt]

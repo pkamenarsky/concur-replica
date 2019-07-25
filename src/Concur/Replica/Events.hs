@@ -2,7 +2,7 @@
 
 module Concur.Replica.Events where
 
-import           Concur.Replica.Props     (Props(Props), Prop(PropEvent))
+import           Concur.Replica.Props     (Props, Prop(PropEvent), mkProp)
 
 import           Data.Aeson               ((.=), (.:), (.:?))
 import qualified Data.Aeson               as A
@@ -121,84 +121,84 @@ instance A.FromJSON KeyboardEvent where
 -- <https://developer.mozilla.org/en-US/docs/Web/Events/blur>
 --
 onBlur :: Props BaseEvent
-onBlur = Props "onBlur" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
+onBlur = mkProp "onBlur" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
 
 -- | https://developer.mozilla.org/en-US/docs/Web/Events/click
 onClick :: Props MouseEvent
-onClick = Props "onClick" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
+onClick = mkProp "onClick" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
 
 -- | https://developer.mozilla.org/en-US/docs/Web/Events/focus
 onFocus :: Props BaseEvent
-onFocus = Props "onFocus" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
+onFocus = mkProp "onFocus" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
 
 -- | https://developer.mozilla.org/en-US/docs/Web/Events/dblclick
 onDoubleClick :: Props MouseEvent
-onDoubleClick = Props "onDblClick" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
+onDoubleClick = mkProp "onDblClick" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
 
 -- | https://developer.mozilla.org/en-US/docs/Web/Events/input
 onInput :: Props BaseEvent
-onInput = Props "onInput" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
+onInput = mkProp "onInput" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
 
 -- | https://developer.mozilla.org/en-US/docs/Web/Events/change
 onChange :: Props BaseEvent
-onChange = Props "onChange" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
+onChange = mkProp "onChange" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
 
 -- | https://developer.mozilla.org/en-US/docs/Web/Events/keydown
 onKeyDown :: Props KeyboardEvent
-onKeyDown = Props "onKeyDown" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
+onKeyDown = mkProp "onKeyDown" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
 
 -- | https://developer.mozilla.org/en-US/docs/Web/Events/keypress
 onKeyPress :: Props KeyboardEvent
-onKeyPress = Props "onKeyPress" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
+onKeyPress = mkProp "onKeyPress" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
 
 -- | https://developer.mozilla.org/en-US/docs/Web/Events/keyup
 onKeyUp :: Props KeyboardEvent
-onKeyUp = Props "onKeyUp" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
+onKeyUp = mkProp "onKeyUp" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
 
 -- | https://developer.mozilla.org/en-US/docs/Web/Events/mouseup
 onMouseUp :: Props MouseEvent
-onMouseUp = Props "onMouseUp" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
+onMouseUp = mkProp "onMouseUp" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
 
 -- | https://developer.mozilla.org/en-US/docs/Web/Events/mousedown
 onMouseDown :: Props MouseEvent
-onMouseDown = Props "onMouseDown" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
+onMouseDown = mkProp "onMouseDown" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
 
 -- | https://developer.mozilla.org/en-US/docs/Web/Events/mouseenter
 onMouseEnter :: Props MouseEvent
-onMouseEnter = Props "onMouseEnter" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
+onMouseEnter = mkProp "onMouseEnter" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
 
 -- | https://developer.mozilla.org/en-US/docs/Web/Events/mouseleave
 onMouseLeave :: Props MouseEvent
-onMouseLeave = Props "onMouseLeave" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
+onMouseLeave = mkProp "onMouseLeave" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
 
 -- | https://developer.mozilla.org/en-US/docs/Web/Events/mouseover
 onMouseOver :: Props MouseEvent
-onMouseOver = Props "onMouseOver" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
+onMouseOver = mkProp "onMouseOver" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
 
 -- | https://developer.mozilla.org/en-US/docs/Web/Events/mouseout
 onMouseOut :: Props MouseEvent
-onMouseOut = Props "onMouseOut" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
+onMouseOut = mkProp "onMouseOut" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
 
 -- | https://developer.mozilla.org/en-US/docs/Web/Events/dragstart
 onDragStart :: Props MouseEvent
-onDragStart = Props "onDragStart" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
+onDragStart = mkProp "onDragStart" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
 
 -- | https://developer.mozilla.org/en-US/docs/Web/Events/dragover
 onDragOver :: Props MouseEvent
-onDragOver = Props "onDragOver" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
+onDragOver = mkProp "onDragOver" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
 
 -- | https://developer.mozilla.org/en-US/docs/Web/Events/dragend
 onDragEnd :: Props MouseEvent
-onDragEnd = Props "onDragEnd" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
+onDragEnd = mkProp "onDragEnd" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
 
 -- | https://developer.mozilla.org/en-US/docs/Web/Events/dragenter
 onDragEnter :: Props MouseEvent
-onDragEnter = Props "onDragEnter" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
+onDragEnter = mkProp "onDragEnter" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
 
 -- | https://developer.mozilla.org/en-US/docs/Web/Events/dragleave
 onDragLeave :: Props MouseEvent
-onDragLeave = Props "onDragLeave" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
+onDragLeave = mkProp "onDragLeave" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
 
 -- | https://developer.mozilla.org/en-US/docs/Web/Events/drag
 onDrag :: Props MouseEvent
-onDrag = Props "onDrag" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
+onDrag = mkProp "onDrag" (PropEvent (extractResult . A.fromJSON . getDOMEvent))
