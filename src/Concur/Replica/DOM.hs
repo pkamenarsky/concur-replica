@@ -19,7 +19,7 @@ import           Data.Traversable         (sequenceA)
 
 import qualified Data.Map                 as M
 
-import           Replica.VDOM             (Attr(AText, ABool, AEvent, AMap), HTML, DOMEvent, VDOM(VNode, VText))
+import           Replica.VDOM             (Attrs, Attr(AText, ABool, AEvent, AMap), HTML, DOMEvent, VDOM(VNode, VText))
 
 type WidgetConstraints m = (ShiftMap (Widget HTML) m, Monad m, MonadSafeBlockingIO m, MonadUnsafeBlockingIO m, MultiAlternative m)
 
@@ -28,7 +28,7 @@ el e props children = do
   (attrs, cs) <- liftUnsafeBlockingIO $ toAttrs (mconcat props)
   shiftMap (wrapView $ VNode e attrs) $ orr (children <> cs)
   where
-    toAttrs :: Props a -> IO (M.Map T.Text Attr, [m a])
+    toAttrs :: Props a -> IO (Attrs, [m a])
     toAttrs (Props m) = do
       (kvs, cs) <- unzip <$> sequenceA [ (\(v, cs) -> ((k, v), cs)) <$> toAttr v | (k, v) <- M.toList m ]
       pure (M.fromList kvs, mconcat cs)
