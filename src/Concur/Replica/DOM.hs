@@ -8,7 +8,7 @@ module Concur.Replica.DOM where
 import           Control.Concurrent       (newEmptyMVar, putMVar, takeMVar)
 
 import           Concur.Core              (Widget, MonadSafeBlockingIO(liftSafeBlockingIO), MonadUnsafeBlockingIO(liftUnsafeBlockingIO), MultiAlternative, wrapView, orr, display)
-import           Concur.Replica.Props     (Props(Props), Prop(PropText, PropBool, PropEvent, PropMap), key)
+import           Concur.Replica.Props     (Props, Prop, key)
 
 import           Control.ShiftMap         (ShiftMap(shiftMap))
 
@@ -19,27 +19,28 @@ import           Data.Traversable         (sequenceA)
 
 import qualified Data.Map                 as M
 
-import           Replica.VDOM             (Attrs, Attr(AText, ABool, AEvent, AMap), HTML, DOMEvent, VDOM(VNode, VText))
+import           Replica.VDOM             (Attrs, Attr'(AText, ABool, AEvent, AMap), HTML, DOMEvent, VDOM(VNode, VText))
+import           Replica.VDOM.Types       (Attrs'(Attrs))
 
 type WidgetConstraints m = (ShiftMap (Widget HTML) m, Monad m, MonadSafeBlockingIO m, MonadUnsafeBlockingIO m, MultiAlternative m)
 
-el :: forall m a. WidgetConstraints m => T.Text -> [Props a] -> [m a] -> m a
+el :: forall m a. WidgetConstraints m => T.Text -> [Attrs' a] -> [m a] -> m a
 el e props children = do
   (attrs, cs) <- liftUnsafeBlockingIO $ toAttrs (mconcat props)
   shiftMap (wrapView $ VNode e attrs) $ orr (children <> cs)
   where
-    toAttrs :: Props a -> IO (Attrs, [m a])
-    toAttrs (Props m) = do
+    toAttrs :: Attrs' a -> IO (Attrs' (IO ()), [m a])
+    toAttrs (Attrs m) = do
       (kvs, cs) <- unzip <$> sequenceA [ (\(v, cs) -> ((k, v), cs)) <$> toAttr v | (k, v) <- M.toList m ]
-      pure (M.fromList kvs, mconcat cs)
+      pure (Attrs $ M.fromList kvs, mconcat cs)
 
-    toAttr :: Prop a -> IO (Attr, [m a])
-    toAttr (PropText v) = pure (AText v, [])
-    toAttr (PropBool v) = pure (ABool v, [])
-    toAttr (PropEvent extract) = do
+    toAttr :: Attr' a -> IO (Attr' (IO ()), [m a])
+    toAttr (AText v) = pure (AText v, [])
+    toAttr (ABool v) = pure (ABool v, [])
+    toAttr (AEvent extract) = do
       n <- newEmptyMVar
       pure (AEvent $ putMVar n, [liftSafeBlockingIO (extract <$> takeMVar n)])
-    toAttr (PropMap m) = do
+    toAttr (AMap m) = do
       (n, cs) <- toAttrs m
       pure (AMap n, cs)
 
