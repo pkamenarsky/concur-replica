@@ -26,7 +26,7 @@ key :: T.Text -> Props a
 key v = textProp "key" v
 
 style :: [(T.Text, T.Text)] -> Props a
-style m = mkProp "style" $ AMap $ Attrs $  M.fromList [ (k, AText v) | (k, v) <- m ]
+style m = mkProp "style" $ AMap $ Attrs $ M.fromList [ (k, AText v) | (k, v) <- m ]
 
 -- | Define multiple classes conditionally
 --
