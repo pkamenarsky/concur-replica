@@ -7,8 +7,8 @@ extra-deps:
 # - ./vendor/concur-core
 # - git: https://github.com/pkamenarsky/replica.git
 #   commit: 69249ec760b8b8272d302269b54ddc4531d508a9
-- git: https://github.com/pkamenarsky/concur.git
-  commit: 6c6bcc07b2688182945b28f154a013eee3f624c5
+- git: https://github.com/ajnsit/concur.git
+  commit: deef7cf42d193147abefb7f3b7ad2748a16368b8
   subdirs:
     - concur-core
 flags: {}
