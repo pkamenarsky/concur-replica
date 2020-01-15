@@ -74,3 +74,9 @@ executables:
     - concur-replica
     - mtl
     - text
+  concur-replica-select:
+    main: Main.hs
+    source-dirs: examples/Select
+    dependencies:
+    - concur-replica
+    - text
