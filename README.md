@@ -38,7 +38,7 @@ The examples are mostly taken from `concur-react`, but there are a couple of new
 
 ```
 stack build
-stack exec concur-replica-(calc|hilo|menu|misc|multi-entry)
+stack exec concur-replica-(calc|hilo|menu|misc|multi-entry|select)
 ```
 
 Point your browser to `http://localhost:8080` and behold the remote VDOM goodness.
