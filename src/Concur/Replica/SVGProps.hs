@@ -8,11 +8,14 @@ import Concur.Replica.Props
 version :: T.Text -> Props a
 version = textProp "version"
 
-xProp :: T.Text -> Props a
-xProp = textProp "x"
+fill :: T.Text -> Props a
+fill = textProp "fill"
 
-yProp :: T.Text -> Props a
-yProp = textProp "y"
+x :: T.Text -> Props a
+x = textProp "x"
+
+y :: T.Text -> Props a
+y = textProp "y"
 
 xmlns :: Props a
 xmlns  = textProp "xmlns" "http://www.w3.org/2000/svg"

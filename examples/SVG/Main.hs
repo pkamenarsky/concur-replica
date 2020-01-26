@@ -21,17 +21,17 @@ selectApp :: Maybe Text -> Widget HTML a
 selectApp mSelected = do
   _ <-
     div []
-    [ p [] [text "Display a black rectangle, which is replaced by a smaller one after a second."]
+    [ p [] [text "You should see a black rectangle for one second..."]
     , S.svg [width "200", height "200", SP.version "1.1", SP.xmlns]
-        [ S.rect [SP.xProp "10", SP.yProp "10", width "180", height "180"]
+        [ S.rect [SP.x "10", SP.y "10", width "180", height "180"]
             []
         ]
     , liftIO (threadDelay 2000000)
     ]
   div []
-    [ p [] [text "You should see a black rectagle."]
+    [ p [] [text "Now you should see a small red rectangle."]
     , S.svg [width "200", height "200", SP.version "1.1", SP.xmlns]
-        [ S.rect [SP.xProp "10", SP.yProp "10", width "100", height "100"]
+        [ S.rect [SP.x "60", SP.y "60", width "80", height "80", SP.fill "red"]
             []
         ]
     ]
