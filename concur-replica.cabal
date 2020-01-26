@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.31.1.
+-- This file has been generated from package.yaml by hpack version 0.31.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 20c6f76b52cd574b5ba22a2edd6df971648c456041bbd3db22679b41f09b92db
+-- hash: 66c6c6a545d3dcc0bcc94ea9a67d50cf7232e13136da2f033a1f3cb5b1723a31
 
 name:           concur-replica
 version:        0.1.0.0
@@ -33,6 +33,8 @@ library
       Concur.Replica.Props
       Concur.Replica.Events
       Concur.Replica.Run
+      Concur.Replica.SVG
+      Concur.Replica.SVGProps
   other-modules:
       Paths_concur_replica
   hs-source-dirs:
@@ -182,6 +184,30 @@ executable concur-replica-select
       Paths_concur_replica
   hs-source-dirs:
       examples/Select
+  ghc-options: -Wall -ferror-spans
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , concur-core
+    , concur-replica
+    , containers
+    , free >=4.12
+    , replica
+    , text
+    , transformers >=0.5
+    , wai
+    , wai-websockets
+    , warp
+    , websockets
+  default-language: Haskell2010
+
+executable concur-replica-svg
+  main-is: Main.hs
+  other-modules:
+      Paths_concur_replica
+  hs-source-dirs:
+      examples/SVG
   ghc-options: -Wall -ferror-spans
   build-depends:
       aeson
