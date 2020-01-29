@@ -6,7 +6,7 @@ extra-deps:
 # - ./vendor/replica
 # - ./vendor/concur-core
 - git: https://github.com/seagreen/replica.git
-  commit: fcb927ecc87d2c405cfb884a024fd54b4bbe489f
+  commit: fcf6f06bce4582277e21e398e40762b2957a373d
 - git: https://github.com/pkamenarsky/concur.git
   commit: 6c6bcc07b2688182945b28f154a013eee3f624c5
   subdirs:
