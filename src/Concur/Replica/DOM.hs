@@ -17,14 +17,17 @@ import qualified Data.Text                as T
 
 import qualified Data.Map                 as M
 
-import           Replica.VDOM             (Attr(AText, ABool, AEvent, AMap), HTML, DOMEvent, VDOM(VNode, VText))
+import           Replica.VDOM             (Attr(AText, ABool, AEvent, AMap), HTML, DOMEvent, Namespace, VDOM(VNode, VText))
 
 type WidgetConstraints m = (ShiftMap (Widget HTML) m, Monad m, MonadSafeBlockingIO m, MonadUnsafeBlockingIO m, MultiAlternative m)
 
 el :: forall m a. WidgetConstraints m => T.Text -> [Props a] -> [m a] -> m a
-el e attrs children = do
+el = elWithNamespace Nothing
+
+elWithNamespace :: forall m a. WidgetConstraints m => Maybe Namespace -> T.Text -> [Props a] -> [m a] -> m a
+elWithNamespace mNamespace e attrs children = do
   attrs' <- liftUnsafeBlockingIO $ mapM toAttr attrs
-  shiftMap (wrapView (VNode e (M.fromList $ fmap fst attrs'))) $ orr (children <> concatMap snd attrs')
+  shiftMap (wrapView (VNode e (M.fromList $ fmap fst attrs') mNamespace)) $ orr (children <> concatMap snd attrs')
   where
     toAttr :: Props a -> IO ((T.Text, Attr), [m a])
     toAttr (Props k (PropText v)) = pure ((k, AText v), [])
