@@ -2,19 +2,16 @@
 
 module Main where
 
-import Control.Concurrent
 import Control.Monad.IO.Class
 
 import Concur.Core
-import Concur.Replica
+import Concur.Replica hiding (s)
 import Replica.VDOM (HTML)
 
 import qualified Data.Text as T
 
 import Prelude hiding (div)
 import qualified Prelude as P
-
-import Debug.Trace
 
 -- Possible actions emited by the Calculator buttons
 data CalculatorAction = Plus | Minus | Times | Div | Enter | Clear | Digit Int
@@ -58,8 +55,8 @@ mainStandard :: IO ()
 mainStandard = runDefault 80 "Calculator" $ go 0 []
   where
     go n s = do
-      a <- orr [text (T.pack $ show (s, n)), calcButtonsWidget]
-      let (s', n') = calc s a in go n' s'
+      x <- orr [text (T.pack $ show (s, n)), calcButtonsWidget]
+      let (s', n') = calc s x in go n' s'
 
 -- But in this example we don't use this "standard" way of doing things
 
@@ -76,9 +73,9 @@ buttonsWidget showResultWidget = go []
     -- This Widget effectively -
     go st = do
       -- 1. Displays the calculator buttons
-      a <- calcButtonsWidget
+      x <- calcButtonsWidget
       -- 2. Updates the state of the calculation when a button is pressed
-      let (st', n) = calc st a
+      let (st', n) = calc st x
       -- 3. Uses the widget passed in to display the current result
       showResultWidget n
       -- 4. Repeats

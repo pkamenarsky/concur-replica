@@ -11,7 +11,7 @@ github: pkamenarsky/concur-replica
 extra-source-files:
 - README.md
 ghc-options:
-- -w
+- -Wall
 - -ferror-spans
 dependencies:
 - base >=4.7 && <5
@@ -30,7 +30,7 @@ dependencies:
 library:
   source-dirs: src
   ghc-options:
-  - -w
+  - -Wall
   - -ferror-spans
   - -Wincomplete-uni-patterns
   - -Wincomplete-record-updates

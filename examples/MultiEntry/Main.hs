@@ -21,14 +21,14 @@ doubleMenu :: T.Text -> T.Text -> MenuItems a -> (a -> MenuItems b) -> Widget HT
 doubleMenu label1 label2 items f = menu1 >>= go
   where
     menu1 = menuWidget label1 items
-    menu2 a = menuWidget label2 (f a)
-    go a = orr [fmap Left menu1, fmap Right (menu2 a)] >>= either go return
+    menu2 x = menuWidget label2 (f x)
+    go x = orr [fmap Left menu1, fmap Right (menu2 x)] >>= either go return
 
 -- A simple select menu
 menuWidget :: T.Text -> MenuItems a -> Widget HTML a
-menuWidget label items = div [className "menu"] 
+menuWidget label' items = div [className "menu"]
   [ do
-      button [onClick] [text label]
+      _ <- button [onClick] [text label']
       orr $ map menuButton items
   ]
   where
@@ -47,30 +47,30 @@ entriesStateInit n = EntriesState $ replicate n entryStateInit
 entryWidget :: EntryState -> Widget HTML EntryState
 entryWidget (EntryState {..}) = go color
   where
-    go col =
+    go col' =
       div [className "main"]
         [ hr []
         , heading "Select a color"
         , Left <$> selColor
         , heading "Make entries"
-        , Right <$> newEntry col
+        , Right <$> newEntry col'
         , heading "Current entries"
         , entriesList
         ]
-      >>= either go (\e -> return (EntryState col (e:items)))
+      >>= either go (\e -> return (EntryState col' (e:items)))
     heading = h4 [] . (:[]) . text
     selColor = doubleMenu "Fruits" "Color" itemsFruit itemsColor
-    newEntry col = menuWidget ("New Entry for " <> col <> " fruit") (itemsFruitColor col)
+    newEntry col' = menuWidget ("New Entry for " <> col' <> " fruit") (itemsFruitColor col')
     entriesList = orr $ map (div [] . (:[]) . text) items
 
 -- Main
 main :: IO ()
 main = void $ runDefault 8080 "MultiEntry" $ flip execStateT (entriesStateInit 5) $ forever $ do
     EntriesState {..} <- get
-    (i, e') <- lift $ orr (renderEntry <$> zip [0..] entries)
-    put $ EntriesState (take i entries ++ [e'] ++ drop (i+1) entries)
+    (i', e') <- lift $ orr (renderEntry <$> zip [0..] entries)
+    put $ EntriesState (take i' entries ++ [e'] ++ drop (i'+1) entries)
   where
-    renderEntry (i,e) = (i,) <$> entryWidget e
+    renderEntry (i',e) = (i',) <$> entryWidget e
 
 -- Items for first menu
 itemsFruit :: MenuItems T.Text

@@ -37,7 +37,7 @@ library
       Paths_concur_replica
   hs-source-dirs:
       src
-  ghc-options: -w -ferror-spans -w -ferror-spans -Wincomplete-uni-patterns -Wincomplete-record-updates -Wmissing-import-lists
+  ghc-options: -Wall -ferror-spans -Wall -ferror-spans -Wincomplete-uni-patterns -Wincomplete-record-updates -Wmissing-import-lists
   build-depends:
       aeson
     , base >=4.7 && <5
@@ -60,7 +60,7 @@ executable concur-replica-calc
       Paths_concur_replica
   hs-source-dirs:
       examples/Calc
-  ghc-options: -w -ferror-spans
+  ghc-options: -Wall -ferror-spans
   build-depends:
       aeson
     , base >=4.7 && <5
@@ -84,7 +84,7 @@ executable concur-replica-hilo
       Paths_concur_replica
   hs-source-dirs:
       examples/HiLo
-  ghc-options: -w -ferror-spans
+  ghc-options: -Wall -ferror-spans
   build-depends:
       aeson
     , base >=4.7 && <5
@@ -109,7 +109,7 @@ executable concur-replica-menu
       Paths_concur_replica
   hs-source-dirs:
       examples/Menu
-  ghc-options: -w -ferror-spans
+  ghc-options: -Wall -ferror-spans
   build-depends:
       aeson
     , base >=4.7 && <5
@@ -133,7 +133,7 @@ executable concur-replica-misc
       Paths_concur_replica
   hs-source-dirs:
       examples/Misc
-  ghc-options: -w -ferror-spans
+  ghc-options: -Wall -ferror-spans
   build-depends:
       aeson
     , base >=4.7 && <5
@@ -157,7 +157,7 @@ executable concur-replica-multi-entry
       Paths_concur_replica
   hs-source-dirs:
       examples/MultiEntry
-  ghc-options: -w -ferror-spans
+  ghc-options: -Wall -ferror-spans
   build-depends:
       aeson
     , base >=4.7 && <5
@@ -182,7 +182,7 @@ executable concur-replica-select
       Paths_concur_replica
   hs-source-dirs:
       examples/Select
-  ghc-options: -w -ferror-spans
+  ghc-options: -Wall -ferror-spans
   build-depends:
       aeson
     , base >=4.7 && <5
