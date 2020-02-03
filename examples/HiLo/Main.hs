@@ -19,8 +19,8 @@ import           Prelude hiding (div)
 
 inputEnter :: T.Text -> Widget HTML T.Text
 inputEnter v = do
-  e <- input [ autofocus True, value v, Left <$> onInput, Right <$> onKeyDown ]
-  case e of
+  ev <- input [ autofocus True, value v, Left <$> onInput, Right <$> onKeyDown ]
+  case ev of
     Left e  -> inputEnter (targetValue $ target e)
     Right e -> if kbdKey e == "Enter"
       then pure v

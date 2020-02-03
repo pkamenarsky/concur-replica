@@ -7,7 +7,7 @@ import qualified Data.Text              as T
 import           Control.Monad (forever)
 
 import           Concur.Core
-import           Concur.Replica
+import           Concur.Replica hiding (a, b, i)
 
 import           Prelude hiding (div)
 
@@ -23,8 +23,8 @@ menuWidget cs = top 0 items >>= open items
     open opts (b,i) =
       let w = [Left <$> top 0 (take i opts), Right <$> b, Left <$> top (i+1) (drop (i+1) opts)]
       in orr w >>= either (open opts) return
-    menuItem (label, children) =
-      ( div [className "menu"] [button [onClick] [text label]]
+    menuItem (label', children) =
+      ( div [className "menu"] [button [onClick] [text label']]
       , const $ div [className "menu"] (map menuButton children)
       )
     menuButton (ret,str) = ret <$ button [onClick] [text str]

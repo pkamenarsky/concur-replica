@@ -4,14 +4,11 @@ module Main where
 
 import Concur.Core (Widget)
 import Concur.Replica
-import Control.Monad.IO.Class
 import Data.Maybe
 import Data.Text (Text)
 import Replica.VDOM (HTML)
 
 import Prelude hiding (div)
-
-import qualified Data.Text as T
 
 selectApp :: Maybe Text -> Widget HTML a
 selectApp mSelected = do

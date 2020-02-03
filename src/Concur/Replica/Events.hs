@@ -4,7 +4,7 @@ module Concur.Replica.Events where
 
 import           Concur.Replica.Props     (Props(Props), Prop(PropEvent))
 
-import           Data.Aeson               ((.=), (.:), (.:?))
+import           Data.Aeson               ((.:), (.:?))
 import qualified Data.Aeson               as A
 
 import qualified Data.Text                as T

@@ -17,7 +17,7 @@ import qualified Data.Text                as T
 
 import qualified Data.Map                 as M
 
-import           Replica.VDOM             (Attr(AText, ABool, AEvent, AMap), HTML, DOMEvent, Namespace, VDOM(VNode, VText))
+import           Replica.VDOM             (Attr(AText, ABool, AEvent, AMap), HTML, Namespace, VDOM(VNode, VText))
 
 type WidgetConstraints m = (ShiftMap (Widget HTML) m, Monad m, MonadSafeBlockingIO m, MonadUnsafeBlockingIO m, MultiAlternative m)
 

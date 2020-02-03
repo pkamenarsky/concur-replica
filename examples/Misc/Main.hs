@@ -10,7 +10,7 @@ import qualified Data.Text as T
 import           Control.Exception
 import           Control.Monad.IO.Class
 import           Concur.Core (Widget, orr)
-import           Concur.Replica
+import           Concur.Replica hiding (i)
 
 import qualified Prelude as P
 import           Prelude hiding (div)
@@ -23,8 +23,8 @@ data Todo = Todo
 
 inputOnEnter :: T.Text -> Widget HTML T.Text
 inputOnEnter v = do
-  e <- input [ autofocus True, placeholder "What needs to be done?", value v, Left <$> onInput, Right <$> onKeyDown ]
-  case e of
+  ev <- input [ autofocus True, placeholder "What needs to be done?", value v, Left <$> onInput, Right <$> onKeyDown ]
+  case ev of
     Left e  -> inputOnEnter (targetValue $ target e)
     Right e -> if kbdKey e == "Enter"
       then pure v
@@ -32,7 +32,7 @@ inputOnEnter v = do
 
 todo :: Todo -> Widget HTML Todo
 todo v = do
-  e <- div
+  ev <- div
     [ key $ T.pack $ show (todoId v), Left <$> onDoubleClick
     , style
         [ ("color", if todoDone v then "#ccc" else "#333")
@@ -41,36 +41,36 @@ todo v = do
     [ input [ type_ "checkbox", checked (todoDone v), Right <$> onClick ]
     , text (todoValue v)
     ]
-  case e of
-    Right e -> pure $ v { todoDone = not (todoDone v) }
+  case ev of
+    Right _ -> pure $ v { todoDone = not (todoDone v) }
     Left _  -> do
       e <- div [] [ inputOnEnter (todoValue v) ]
       pure $ v { todoValue = e }
 
 todoList :: T.Text -> [Todo] -> Widget HTML [Todo]
 todoList flt vs = do
-  (i, todo) <- div [] 
+  (i, newEntry) <- div []
     [ orr $ flip mapMaybe (zip [0..] vs) $ \(i, v) -> if flt `T.isInfixOf` todoValue v
         then Just ((i,) <$> (todo v))
         else Nothing
     ]
-  pure (take i vs ++ [todo] ++ drop (i + 1) vs)
+  pure (take i vs ++ [newEntry] ++ drop (i + 1) vs)
 
 data OneOf3 a b c = One3 a | Two3 b | Three3 c
 
 todos :: Widget HTML a
 todos = go 0 "" []
   where
-    go vid filter vs = do
-      e <- div []
+    go vid filter' vs = do
+      ev <- div []
         [ One3   <$> inputOnEnter ""
-        , Two3   <$> input [ placeholder "Filter todos",  value filter, onInput ]
-        , Three3 <$> todoList filter vs
+        , Two3   <$> input [ placeholder "Filter todos",  value filter', onInput ]
+        , Three3 <$> todoList filter' vs
         ]
-      case e of
-        One3 e    -> go (vid + 1) filter (Todo e False vid:vs)
+      case ev of
+        One3 e    -> go (vid + 1) filter' (Todo e False vid:vs)
         Two3 e    -> go vid (targetValue $ target e) vs
-        Three3 vs -> go vid filter vs
+        Three3 vs' -> go vid filter' vs'
 
 --------------------------------------------------------------------------------
 
@@ -144,14 +144,14 @@ mouseEnterLeaveApp = runDefault 8080 "Mouse enter/leave test" mouseEnterLeave
 
 exWidget :: Widget HTML a
 exWidget = do
-  e <- div [ onClick ] [ text "BOOM" ]
-  a <- liftIO $ evaluate ((5 `P.div` 0))
-  text $ T.pack $ show "asd"
+  _ <- div [ onClick ] [ text "BOOM" ]
+  _ <- liftIO $ evaluate ((5 `P.div` (0 :: Int)))
+  _ <- text "asd"
   exWidget
 
 dispatch :: Widget HTML ()
 dispatch = do
- div []
+ _ <- div []
    [ p [] [ text "Hello" ]
    , button [ onClick ] [ text "Go next" ]
    ]
@@ -166,7 +166,7 @@ dispatch = do
 
 dispatch2 :: Widget HTML a
 dispatch2 = do
-    div []
+    _ <- div []
       [ p [] [ text "Hello" ]
       , button [ onClick ] [ text "Go next" ]
       ]
