@@ -10,7 +10,7 @@ import Prelude hiding (div)
 import Replica.VDOM (HTML)
 
 import qualified Concur.Replica.SVG as S
-import qualified Concur.Replica.SVGProps as SP
+import qualified Concur.Replica.SVG.Props as SP
 
 xmlns :: Props a
 xmlns = textProp "xmlns" "http://www.w3.org/2000/svg"

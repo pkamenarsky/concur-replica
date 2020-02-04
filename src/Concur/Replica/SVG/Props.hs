@@ -2,7 +2,7 @@
 
 -- | Note that this module is auto-generated.
 -- See @./misc/generate-svg-props@ for details.
-module Concur.Replica.SVGProps where
+module Concur.Replica.SVG.Props where
 
 import           Concur.Replica.Props (Props, textProp)
 

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 66c6c6a545d3dcc0bcc94ea9a67d50cf7232e13136da2f033a1f3cb5b1723a31
+-- hash: 756b6cfef4b43078b0e9d6f369c27737ba17b04764e07d1976fc16c00a3b2cd5
 
 name:           concur-replica
 version:        0.1.0.0
@@ -34,7 +34,7 @@ library
       Concur.Replica.Events
       Concur.Replica.Run
       Concur.Replica.SVG
-      Concur.Replica.SVGProps
+      Concur.Replica.SVG.Props
   other-modules:
       Paths_concur_replica
   hs-source-dirs:

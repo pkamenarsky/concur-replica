@@ -42,7 +42,7 @@ library:
   - Concur.Replica.Events
   - Concur.Replica.Run
   - Concur.Replica.SVG
-  - Concur.Replica.SVGProps
+  - Concur.Replica.SVG.Props
 executables:
   concur-replica-calc:
     main: Main.hs

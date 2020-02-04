@@ -25,7 +25,7 @@ import qualified Data.Text as T
 
 main :: IO ()
 main =
-  BS.writeFile "./src/Concur/Replica/SVGProps.hs" (encodeUtf8 generatedFile)
+  BS.writeFile "./src/Concur/Replica/SVG/Props.hs" (encodeUtf8 generatedFile)
 
 
 generatedFile :: Text
@@ -80,7 +80,7 @@ fileStart = [s|
 
 -- | Note that this module is auto-generated.
 -- See @./misc/generate-svg-props@ for details.
-module Concur.Replica.SVGProps where
+module Concur.Replica.SVG.Props where
 
 import           Concur.Replica.Props (Props, textProp)
 
