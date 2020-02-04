@@ -3,13 +3,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 
--- | Regenerate the SVG attributes module.
+-- | Regenerate SVG modules.
 --
 -- Use from the top level of the repo, not the ./misc folder.
 --
 -- Eg:
 --
---   $ ./misc/gen-svg-props.hs
+--   $ ./misc/gen-svg-modules.hs
 module Main where
 
 import Data.String.QQ
@@ -20,28 +20,35 @@ import qualified Data.ByteString as BS
 import qualified Data.Char as Char
 import qualified Data.Text as T
 
-
 main :: IO ()
-main =
-  BS.writeFile "./src/Concur/Replica/SVG/Props.hs" (encodeUtf8 generatedFile)
+main = do
+  BS.writeFile "./src/Concur/Replica/SVG.hs" (encodeUtf8 elementFile)
+  BS.writeFile "./src/Concur/Replica/SVG/Props.hs" (encodeUtf8 propFile)
 
+elementFile :: Text
+elementFile =
+  T.intercalate "\n" (elementFileStart : (uncurry elementFunction <$> addHsNames elementNames))
 
-generatedFile :: Text
-generatedFile =
-  T.intercalate "\n" (fileStart : (uncurry attributeFunction <$> attributeMap))
+propFile :: Text
+propFile =
+  T.intercalate "\n" (propFileStart : (uncurry attributeFunction <$> addHsNames propNames))
 
+elementFunction :: Text -> Text -> Text
+elementFunction nameHs nameSvg =
+     nameHs <> " :: WidgetConstraints m => [Props a] -> [m a] -> m a\n"
+  <> nameHs <> " = el \"" <> nameSvg <> "\"\n"
 
 attributeFunction :: Text -> Text -> Text
 attributeFunction nameHs nameSvg =
      nameHs <> " :: T.Text -> Props a\n"
   <> nameHs <> " = textProp \"" <> nameSvg <> "\"\n"
 
-
-attributeMap :: [(Text, Text)]
-attributeMap =
+-- | First @Text@ in the output is the Haskellized name, second is the original SVG name.
+addHsNames :: Text -> [(Text, Text)]
+addHsNames svgNameList =
   let
     svgNames :: [Text]
-    svgNames = filter (/= mempty) (T.splitOn "\n" attributeList)
+    svgNames = filter (/= mempty) (T.splitOn "\n" svgNameList)
 
     camelCase :: Text -> Text
     camelCase t =
@@ -72,13 +79,48 @@ attributeMap =
     (\svgName -> (toHaskellName svgName, svgName)) <$> svgNames
 
 
-fileStart :: Text
-fileStart = [s|
+
+elementFileStart :: Text
+elementFileStart = [s|
+{-# LANGUAGE FlexibleContexts    #-}
+{-# LANGUAGE OverloadedStrings   #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+
+-- | SVG elements
+--
+-- See: <https://developer.mozilla.org/en-US/docs/Web/SVG/Element>
+module Concur.Replica.SVG where
+
+-- Note that this module is auto-generated.
+-- See @./misc/gen-svg-modules@ for details.
+
+import           Concur.Replica.DOM   (WidgetConstraints, elWithNamespace)
+import           Concur.Replica.Props (Props)
+
+import qualified Data.Text            as T
+
+import           Replica.VDOM.Types   (Namespace(Namespace))
+
+-- | Helper function for creating SVG elements.
+el :: forall m a. WidgetConstraints m => T.Text -> [Props a] -> [m a] -> m a
+el = elWithNamespace (Just (Namespace "http://www.w3.org/2000/svg"))
+
+-- * SVG Elements
+|]
+
+
+
+propFileStart :: Text
+propFileStart = [s|
 {-# LANGUAGE OverloadedStrings #-}
 
--- | Note that this module is auto-generated.
--- See @./misc/generate-svg-props@ for details.
+-- | SVG properties/attributes
+--
+-- See: <https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute>
 module Concur.Replica.SVG.Props where
+
+-- Note that this module is auto-generated.
+-- See @./misc/gen-svg-modules@ for details.
 
 import           Concur.Replica.Props (Props, textProp)
 
@@ -86,12 +128,94 @@ import qualified Data.Text            as T
 |]
 
 
+
+-- | From here: https://developer.mozilla.org/en-US/docs/Web/SVG/Element
+--
+-- Copy pased the "SVG elements A to Z" section and then cleaned it up by hand.
+elementNames :: Text
+elementNames = [s|
+animate
+animateMotion
+animateTransform
+circle
+clipPath
+color-profile
+defs
+desc
+discard
+ellipse
+feBlend
+feColorMatrix
+feComponentTransfer
+feComposite
+feConvolveMatrix
+feDiffuseLighting
+feDisplacementMap
+feDistantLight
+feDropShadow
+feFlood
+feFuncA
+feFuncB
+feFuncG
+feFuncR
+feGaussianBlur
+feImage
+feMerge
+feMergeNode
+feMorphology
+feOffset
+fePointLight
+feSpecularLighting
+feSpotLight
+feTile
+feTurbulence
+filter
+foreignObject
+g
+hatch
+hatchpath
+image
+line
+linearGradient
+marker
+mask
+mesh
+meshgradient
+meshpatch
+meshrow
+metadata
+mpath
+path
+pattern
+polygon
+polyline
+radialGradient
+rect
+script
+set
+solidcolor
+stop
+style
+svg
+switch
+symbol
+text
+textPath
+title
+tspan
+unknown
+use
+view
+|]
+
+
+
 -- | From here: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute
 --
 -- Copy-pasted it from the HTML page and then removed the "A", "B", "C", etc
 -- alphabetical headings.
-attributeList :: Text
-attributeList = [s|
+propNames :: Text
+propNames = [s|
 accent-height
 accumulate
 additive

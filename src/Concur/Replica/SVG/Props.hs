@@ -1,8 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 
--- | Note that this module is auto-generated.
--- See @./misc/generate-svg-props@ for details.
+-- | SVG properties/attributes
+--
+-- See: <https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute>
 module Concur.Replica.SVG.Props where
+
+-- Note that this module is auto-generated.
+-- See @./misc/gen-svg-modules@ for details.
 
 import           Concur.Replica.Props (Props, textProp)
 
