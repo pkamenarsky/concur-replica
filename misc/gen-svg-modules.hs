@@ -1,5 +1,5 @@
 #!/usr/bin/env stack
--- stack --resolver lts-13.19 script
+-- stack --resolver lts-13.19 script --ghc-options=-Wall
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 
@@ -12,13 +12,11 @@
 --   $ ./misc/gen-svg-props.hs
 module Main where
 
-import Data.Foldable
 import Data.String.QQ
 import Data.Text (Text)
 import Data.Text.Encoding
 
 import qualified Data.ByteString as BS
-import qualified Data.ByteString.Lazy.Char8 as L8
 import qualified Data.Char as Char
 import qualified Data.Text as T
 
