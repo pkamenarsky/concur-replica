@@ -65,13 +65,13 @@ addHsNames svgNameList =
     toHaskellName t =
       case camelCase t of
         "class" ->
-          "class'"
+          "className"
 
         "in" ->
-          "in'"
+          "in_"
 
         "type" ->
-          "type'"
+          "type_"
 
         other ->
           other

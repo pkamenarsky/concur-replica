@@ -78,8 +78,8 @@ calcMode = textProp "calcMode"
 capHeight :: T.Text -> Props a
 capHeight = textProp "cap-height"
 
-class' :: T.Text -> Props a
-class' = textProp "class"
+className :: T.Text -> Props a
+className = textProp "class"
 
 clip :: T.Text -> Props a
 clip = textProp "clip"
@@ -285,8 +285,8 @@ ideographic = textProp "ideographic"
 imageRendering :: T.Text -> Props a
 imageRendering = textProp "image-rendering"
 
-in' :: T.Text -> Props a
-in' = textProp "in"
+in_ :: T.Text -> Props a
+in_ = textProp "in"
 
 in2 :: T.Text -> Props a
 in2 = textProp "in2"
@@ -645,8 +645,8 @@ to = textProp "to"
 transform :: T.Text -> Props a
 transform = textProp "transform"
 
-type' :: T.Text -> Props a
-type' = textProp "type"
+type_ :: T.Text -> Props a
+type_ = textProp "type"
 
 u1 :: T.Text -> Props a
 u1 = textProp "u1"
