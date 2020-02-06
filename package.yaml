@@ -41,6 +41,8 @@ library:
   - Concur.Replica.Props
   - Concur.Replica.Events
   - Concur.Replica.Run
+  - Concur.Replica.SVG
+  - Concur.Replica.SVG.Props
 executables:
   concur-replica-calc:
     main: Main.hs
@@ -77,6 +79,12 @@ executables:
   concur-replica-select:
     main: Main.hs
     source-dirs: examples/Select
+    dependencies:
+    - concur-replica
+    - text
+  concur-replica-svg:
+    main: Main.hs
+    source-dirs: examples/SVG
     dependencies:
     - concur-replica
     - text
