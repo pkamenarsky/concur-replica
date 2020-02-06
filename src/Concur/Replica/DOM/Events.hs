@@ -1,8 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Concur.Replica.Events where
+module Concur.Replica.DOM.Events where
 
-import           Concur.Replica.Props     (Props(Props), Prop(PropEvent))
+import           Concur.Replica.DOM.Props (Props(Props), Prop(PropEvent))
 
 import           Data.Aeson               ((.:), (.:?))
 import qualified Data.Aeson               as A

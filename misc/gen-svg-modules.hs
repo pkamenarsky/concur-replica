@@ -94,12 +94,12 @@ module Concur.Replica.SVG where
 -- Note that this module is auto-generated.
 -- See @./misc/gen-svg-modules@ for details.
 
-import           Concur.Replica.DOM   (WidgetConstraints, elWithNamespace)
-import           Concur.Replica.Props (Props)
+import           Concur.Replica.DOM       (WidgetConstraints, elWithNamespace)
+import           Concur.Replica.DOM.Props (Props)
 
-import qualified Data.Text            as T
+import qualified Data.Text                as T
 
-import           Replica.VDOM.Types   (Namespace(Namespace))
+import           Replica.VDOM.Types       (Namespace(Namespace))
 
 -- | Helper function for creating SVG elements.
 el :: forall m a. WidgetConstraints m => T.Text -> [Props a] -> [m a] -> m a
@@ -122,9 +122,9 @@ module Concur.Replica.SVG.Props where
 -- Note that this module is auto-generated.
 -- See @./misc/gen-svg-modules@ for details.
 
-import           Concur.Replica.Props (Props, textProp)
+import           Concur.Replica.DOM.Props (Props, textProp)
 
-import qualified Data.Text            as T
+import qualified Data.Text                as T
 |]
 
 

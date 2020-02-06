@@ -8,9 +8,9 @@ module Concur.Replica.SVG.Props where
 -- Note that this module is auto-generated.
 -- See @./misc/gen-svg-modules@ for details.
 
-import           Concur.Replica.Props (Props, textProp)
+import           Concur.Replica.DOM.Props (Props, textProp)
 
-import qualified Data.Text            as T
+import qualified Data.Text                as T
 
 accentHeight :: T.Text -> Props a
 accentHeight = textProp "accent-height"

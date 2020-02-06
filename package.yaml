@@ -38,8 +38,8 @@ library:
   exposed-modules:
   - Concur.Replica
   - Concur.Replica.DOM
-  - Concur.Replica.Props
-  - Concur.Replica.Events
+  - Concur.Replica.DOM.Props
+  - Concur.Replica.DOM.Events
   - Concur.Replica.Run
   - Concur.Replica.SVG
   - Concur.Replica.SVG.Props

@@ -8,7 +8,7 @@ module Concur.Replica.DOM where
 import           Control.Concurrent       (newEmptyMVar, putMVar, takeMVar)
 
 import           Concur.Core              (Widget, MonadSafeBlockingIO(liftSafeBlockingIO), MonadUnsafeBlockingIO(liftUnsafeBlockingIO), MultiAlternative, wrapView, orr, display)
-import           Concur.Replica.Props     (Props(Props), Prop(PropText, PropBool, PropEvent, PropMap), key)
+import           Concur.Replica.DOM.Props (Props(Props), Prop(PropText, PropBool, PropEvent, PropMap), key)
 
 import           Control.ShiftMap         (ShiftMap(shiftMap))
 
