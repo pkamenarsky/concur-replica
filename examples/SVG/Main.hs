@@ -7,7 +7,7 @@ import Concur.Replica
 import Prelude hiding (div)
 import Replica.VDOM (HTML)
 
-import qualified Concur.Replica.Events as SE
+import qualified Concur.Replica.DOM.Events as SE
 import qualified Concur.Replica.SVG as S
 import qualified Concur.Replica.SVG.Props as SP
 

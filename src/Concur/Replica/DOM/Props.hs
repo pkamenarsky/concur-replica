@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveFunctor       #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Concur.Replica.Props where
+module Concur.Replica.DOM.Props where
 
 import qualified Data.Text                as T
 
