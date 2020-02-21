@@ -30,9 +30,7 @@ The strategy also has two softer costs:
 
 Additionally, `concur-replica` is alpha software so it currently has additional deficiencies. Check the issue tracker for these, and they'll be fixed as it matures.
 
-Despite these caveats however, `concur-replica` has *incredible* benefits. No JS! No REST API layer-- you can call whatever Haskell functions you want directly from your UI code. `concur` is an awesome way of making UIs. And you have the Haskell classics: STM is absolutely unfair for building collaborative apps, and the type system shines since UIs are so annoying to test.
-
-We may have a real path to making Haskell a best-in-class UI language.
+Despite these caveats however, `concur-replica` has *incredible* benefits. No JS! No REST API layer-- you can call whatever Haskell functions you want directly from your UI code. `concur` is an awesome way of making UIs. And you have the Haskell classics: STM is absolutely unfair for building collaborative apps, and UIs are so annoying to test that the type system really shines.
 
 ## Obligatory counter example
 
