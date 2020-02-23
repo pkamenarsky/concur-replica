@@ -27,4 +27,4 @@ selectApp mSelected = do
     eventToText = targetValue . target
 
 main :: IO ()
-main = runDefault 8080 "Select" (selectApp Nothing)
+main = runDefault 8080 "Select" (\_ -> selectApp Nothing)

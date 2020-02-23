@@ -17,20 +17,20 @@ import           Network.Wai                     (Middleware)
 import qualified Network.Wai.Handler.Replica     as R
 import qualified Network.Wai.Handler.Warp        as W
 
-stepWidget :: Free (SuspendF HTML) a -> IO (Maybe (HTML, (Free (SuspendF HTML) a), R.Event -> Maybe (IO ())))
-stepWidget v = case v of
+stepWidget :: R.Context -> (R.Context -> Free (SuspendF HTML) a) -> IO (Maybe (HTML, R.Context -> Free (SuspendF HTML) a, R.Event -> Maybe (IO ())))
+stepWidget ctx v = case v ctx of
   Pure _                   -> pure Nothing
-  Free (StepView new next) -> pure $ Just (new, next, \event -> fireEvent new (R.evtPath event) (R.evtType event) (DOMEvent $ R.evtEvent event))
-  Free (StepIO io next)    -> io >>= stepWidget . next
-  Free (StepBlock io next) -> io >>= stepWidget . next
+  Free (StepView new next) -> pure $ Just (new, const next, \event -> fireEvent new (R.evtPath event) (R.evtType event) (DOMEvent $ R.evtEvent event))
+  Free (StepIO io next)    -> io >>= stepWidget ctx . \r _ -> next r
+  Free (StepBlock io next) -> io >>= stepWidget ctx . \r _ -> next r
   Free Forever             -> pure Nothing
 
-run :: Int -> HTML -> ConnectionOptions -> Middleware -> Widget HTML a -> IO ()
+run :: Int -> HTML -> ConnectionOptions -> Middleware -> (R.Context -> Widget HTML a) -> IO ()
 run port index connectionOptions middleware widget
   = W.run port
-  $ R.app index connectionOptions middleware (step widget) stepWidget
+  $ R.app index connectionOptions middleware (step <$> widget) stepWidget
 
-runDefault :: Int -> T.Text -> Widget HTML a -> IO ()
+runDefault :: Int -> T.Text -> (R.Context -> Widget HTML a) -> IO ()
 runDefault port title widget
   = W.run port
-  $ R.app (defaultIndex title []) defaultConnectionOptions id (step widget) stepWidget
+  $ R.app (defaultIndex title []) defaultConnectionOptions id (step <$> widget) stepWidget

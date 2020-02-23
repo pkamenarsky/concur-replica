@@ -29,7 +29,7 @@ inputEnter v = do
 -- Hi/Lo Game. Demonstrates simple architecture of a Concur app.
 -- Also a good demonstration of how Concur makes IO effects safe at widget transitions (the random number generation).
 main :: IO ()
-main = runDefault 8080 "HiLo" $ forever $ do
+main = runDefault 8080 "HiLo" $ \_ -> forever $ do
   h1 [] [text "I'm thinking of a number between 1 and 100"]
   <|> (liftIO (R.randomRIO (1,100)) >>= go)
   where
