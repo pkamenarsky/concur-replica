@@ -2,11 +2,39 @@
 
 [![CircleCI](https://circleci.com/gh/pkamenarsky/concur-replica.svg?style=svg)](https://circleci.com/gh/pkamenarsky/concur-replica)
 
-`concur-replica` is a [Concur](https://github.com/ajnsit/concur) backend for [Replica](https://github.com/pkamenarsky/replica). As such, you might want to make yourself familiar with both projects first.
+Build interactive web UIs using nothing but Haskell.
+
+No user-written JS. No transpiler.
+
+## How?!
+
+[Replica](https://github.com/pkamenarsky/replica): a remote virtual DOM library. Clients run a fixed JavaScript snippet which opens a connection to your Haskell server. The client uses it to notify the server of browser events, and the server uses it to send DOM updates to be applied by the client.
+
+[Concur](https://github.com/ajnsit/concur): a UI framework that *reifies time* and as such generalizes the Elm architecture. It's based around `Widget`s, sections of the UI that may return a value.
+
+## Upsides and downsides
+
+This strategy is well understood due to its use by [Phoenix LiveView](https://hexdocs.pm/phoenix_live_view) (among other projects).
+
+There are two situations where you should rule `concur-replica` out completely:
+
++ Instant client-side feedback is required
+
++ It needs to work offline
+
+The strategy also has two softer costs:
+
++ Events and updates cost bandwidth (e.g. listening to mouse position, or doing an animation in Haskell instead of CSS)
+
++ It puts a heavier load on your server than a traditional stateless webapp
+
+Additionally, `concur-replica` is alpha software so it currently has additional deficiencies. Check the issue tracker for these, and they'll be fixed as it matures.
+
+Despite these caveats however, `concur-replica` has *incredible* benefits. No JS! No REST API layer -- you can call whatever Haskell functions you want directly from your UI code. `concur` is an awesome way of making UIs. And you have the Haskell classics: STM is absolutely unfair for building collaborative apps, and UIs are so annoying to test that the type system really shines.
 
 ## Obligatory counter example
 
-```
+```hs
 {-# LANGUAGE OverloadedStrings #-}
 
 module Main where
