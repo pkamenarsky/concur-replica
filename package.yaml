@@ -88,3 +88,9 @@ executables:
     dependencies:
     - concur-replica
     - text
+  concur-replica-routing:
+    main: Main.hs
+    source-dirs: examples/Routing
+    dependencies:
+    - concur-replica
+    - text

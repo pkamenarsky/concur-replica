@@ -52,7 +52,7 @@ new n s = (n:s, n)
 
 -- Hooking up everything is pretty easy as can be seen in `mainStandard`
 mainStandard :: IO ()
-mainStandard = runDefault 80 "Calculator" $ go 0 []
+mainStandard = runDefault 80 "Calculator" $ \_ -> go 0 []
   where
     go n s = do
       x <- orr [text (T.pack $ show (s, n)), calcButtonsWidget]
@@ -90,6 +90,6 @@ makeCalcDisplay = liftIO $ remoteWidget defaultDisplay handleResult
 
 -- Now we wire them together easily
 main :: IO ()
-main = runDefault 8080 "Calculator" $ do
+main = runDefault 8080 "Calculator" $ \ctx -> do
   (showResult, calcDisp) <- makeCalcDisplay
   div [] [calcDisp, buttonsWidget showResult]

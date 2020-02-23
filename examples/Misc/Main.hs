@@ -128,17 +128,17 @@ mouseEnterLeave = go False
 --------------------------------------------------------------------------------
 
 counterApp :: IO ()
-counterApp = runDefault 8080 "Counter" (counter 0)
+counterApp = runDefault 8080 "Counter" (\_ -> counter 0)
 
 todosApp :: IO ()
-todosApp = runDefault 8080 "Todos" todos
+todosApp = runDefault 8080 "Todos" $ \_ -> todos
 
 clientSidePredictionApp :: IO ()
 clientSidePredictionApp
-  = runDefault 8080 "Client side prediction test" (clientSidePrediction "")
+  = runDefault 8080 "Client side prediction test" (\_ -> clientSidePrediction "")
 
 mouseEnterLeaveApp :: IO ()
-mouseEnterLeaveApp = runDefault 8080 "Mouse enter/leave test" mouseEnterLeave
+mouseEnterLeaveApp = runDefault 8080 "Mouse enter/leave test" $ \_ -> mouseEnterLeave
 
 --------------------------------------------------------------------------------
 

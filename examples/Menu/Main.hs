@@ -30,7 +30,7 @@ menuWidget cs = top 0 items >>= open items
     menuButton (ret,str) = ret <$ button [onClick] [text str]
 
 main :: IO ()
-main = runDefault 8080 "Menu" $ forever $ do
+main = runDefault 8080 "Menu" $ \_ -> forever $ do
   v <- menuWidget items
   div [] $ [text $ "You picked - " <> v, button [onClick] [text "Restart"]]
   where

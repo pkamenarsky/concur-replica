@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5af07688f4509dd19d240179d6293d9363cdeaa5c19f5966b474cf588c7f4f12
+-- hash: e6db22a2de5e792c7d51e7e42c1c1b2ab5b1428a0545de174696e3bf46bf24fb
 
 name:           concur-replica
 version:        0.1.0.0
@@ -169,6 +169,30 @@ executable concur-replica-multi-entry
     , containers
     , free >=4.12
     , mtl
+    , replica
+    , text
+    , transformers >=0.5
+    , wai
+    , wai-websockets
+    , warp
+    , websockets
+  default-language: Haskell2010
+
+executable concur-replica-routing
+  main-is: Main.hs
+  other-modules:
+      Paths_concur_replica
+  hs-source-dirs:
+      examples/Routing
+  ghc-options: -Wall -ferror-spans
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , concur-core
+    , concur-replica
+    , containers
+    , free >=4.12
     , replica
     , text
     , transformers >=0.5

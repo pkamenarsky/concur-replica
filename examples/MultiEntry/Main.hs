@@ -65,7 +65,7 @@ entryWidget (EntryState {..}) = go color
 
 -- Main
 main :: IO ()
-main = void $ runDefault 8080 "MultiEntry" $ flip execStateT (entriesStateInit 5) $ forever $ do
+main = void $ runDefault 8080 "MultiEntry" $ \_ -> flip execStateT (entriesStateInit 5) $ forever $ do
     EntriesState {..} <- get
     (i', e') <- lift $ orr (renderEntry <$> zip [0..] entries)
     put $ EntriesState (take i' entries ++ [e'] ++ drop (i'+1) entries)

@@ -33,4 +33,4 @@ app = do
     ]
 
 main :: IO ()
-main = runDefault 8080 "SVG" app
+main = runDefault 8080 "SVG" $ \_ -> app
