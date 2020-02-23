@@ -24,7 +24,7 @@ There are two situations where you should rule `concur-replica` out completely:
 
 The strategy also has two softer costs:
 
-+ Animations costs bandwidth as well as CPU
++ Events and updates cost bandwidth (eg listening to mouse position, or doing an animation in Haskell instead of CSS)
 
 + It puts a heavier load on your server than a traditional stateless webapp
 
