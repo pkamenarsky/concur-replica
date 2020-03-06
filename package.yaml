@@ -45,12 +45,6 @@ library:
   - Concur.Replica.SVG
   - Concur.Replica.SVG.Props
 executables:
-  concur-replica-blog:
-    main: Main.hs
-    source-dirs: examples/Blog
-    dependencies:
-    - concur-replica
-    - text
   concur-replica-calc:
     main: Main.hs
     source-dirs: examples/Calc
@@ -98,6 +92,12 @@ executables:
   concur-replica-routing:
     main: Main.hs
     source-dirs: examples/Routing
+    dependencies:
+    - concur-replica
+    - text
+  concur-replica-website:
+    main: Main.hs
+    source-dirs: examples/Website
     dependencies:
     - concur-replica
     - text
