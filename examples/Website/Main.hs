@@ -8,6 +8,8 @@
 -- and server-rendered initial pages.
 module Main where
 
+import Control.Concurrent
+
 import Concur.Core (Widget, orr)
 import Concur.Replica (runDefault)
 import Control.Concurrent.Chan
@@ -45,6 +47,7 @@ route ctx initial f = do
       r <- orr [ Left <$> f a, Right <$> liftIO (readChan chan) ]
       case r of
         Left (UpdateChangeUrl a') -> do
+          -- liftIO $ threadDelay 500000
           liftIO $ putStrLn "pushing state"
           liftIO $ HR.call ctx (toRoute a') "window.history.pushState(null, \"\", arg);"
           go a' chan
@@ -80,7 +83,8 @@ instance Route State where
       SiteC (read c)
 
     _ ->
-      error "Invalid URL"
+      SiteA
+      -- error "Invalid URL"
 
 routingApp :: State -> Widget HTML (AppUpdate State ())
 routingApp = \case
@@ -98,5 +102,5 @@ routingApp = \case
 
 main :: IO ()
 main =
-  runDefault 8080 "Blog" $
+  runDefault 8080 "Website" $
     \ctx -> route ctx SiteA routingApp
