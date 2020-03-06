@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 4c225cf8b3fa56eb71077074cb74309ec1e5c1e9a86a57c8671695259041a15b
+-- hash: 2cba7b1f549ce468741425aa383398fa56702adbc1a1070d0da76a84489d0742
 
 name:           concur-replica
 version:        0.1.0.0
@@ -45,30 +45,6 @@ library
     , base >=4.7 && <5
     , bytestring
     , concur-core
-    , containers
-    , free >=4.12
-    , replica
-    , text
-    , transformers >=0.5
-    , wai
-    , wai-websockets
-    , warp
-    , websockets
-  default-language: Haskell2010
-
-executable concur-replica-blog
-  main-is: Main.hs
-  other-modules:
-      Paths_concur_replica
-  hs-source-dirs:
-      examples/Blog
-  ghc-options: -Wall -ferror-spans
-  build-depends:
-      aeson
-    , base >=4.7 && <5
-    , bytestring
-    , concur-core
-    , concur-replica
     , containers
     , free >=4.12
     , replica
@@ -256,6 +232,30 @@ executable concur-replica-svg
       Paths_concur_replica
   hs-source-dirs:
       examples/SVG
+  ghc-options: -Wall -ferror-spans
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , concur-core
+    , concur-replica
+    , containers
+    , free >=4.12
+    , replica
+    , text
+    , transformers >=0.5
+    , wai
+    , wai-websockets
+    , warp
+    , websockets
+  default-language: Haskell2010
+
+executable concur-replica-website
+  main-is: Main.hs
+  other-modules:
+      Paths_concur_replica
+  hs-source-dirs:
+      examples/Website
   ghc-options: -Wall -ferror-spans
   build-depends:
       aeson
