@@ -8,10 +8,9 @@
 -- and server-rendered initial pages.
 module Main where
 
-import Control.Concurrent
-
 import Concur.Core (Widget, orr)
 import Concur.Replica (runDefault)
+import Control.Concurrent
 import Control.Concurrent.Chan
 import Control.Monad.IO.Class (liftIO)
 import Data.Text (pack)
@@ -38,18 +37,24 @@ route ctx initial f = do
     newHistoryChan :: IO (Chan String)
     newHistoryChan = do
       chan <- newChan
+      forkIO $ logChan =<< dupChan chan
       cb <- HR.registerCallback ctx $ \path -> writeChan chan path
-      HR.call ctx cb "window.onpopstate = function(event) { event.state === \"server-triggered\" ? console.log(\"pass\") : callCallback(arg, location.pathname); console.log(\"popstate callback fired \" + location.pathname); };"
+      HR.call ctx cb "window.onpopstate = function(event) { callCallback(arg, location.pathname) };"
       pure chan
+
+    logChan :: Chan String -> IO ()
+    logChan chan = do
+      e <- readChan chan
+      putStrLn e
+      logChan chan
 
     go :: a -> Chan String -> Widget HTML b
     go a chan = do
       r <- orr [ Left <$> f a, Right <$> liftIO (readChan chan) ]
       case r of
         Left (UpdateChangeUrl a') -> do
-          -- liftIO $ threadDelay 500000
           liftIO $ putStrLn "pushing state"
-          liftIO $ HR.call ctx (toRoute a') "window.history.pushState(\"server-triggered\", \"\", arg);"
+          liftIO $ HR.call ctx (toRoute a') "window.history.pushState(\"\", \"\", arg);"
           go a' chan
 
         Left (UpdateExit b) ->
@@ -83,8 +88,7 @@ instance Route State where
       SiteC (read c)
 
     _ ->
-      SiteA
-      -- error "Invalid URL"
+      error "Invalid URL"
 
 routingApp :: State -> Widget HTML (AppUpdate State ())
 routingApp = \case
