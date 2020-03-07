@@ -11,6 +11,7 @@ module Main where
 import Concur.Core (Widget, orr)
 import Concur.Replica (runDefault)
 import Control.Concurrent
+import Control.Concurrent.Async
 import Control.Concurrent.Chan
 import Control.Monad.IO.Class (liftIO)
 import Data.Text (pack)
@@ -39,7 +40,7 @@ route ctx initial f = do
       chan <- newChan
       forkIO $ logChan =<< dupChan chan
       cb <- HR.registerCallback ctx $ \path -> writeChan chan path
-      HR.call ctx cb "window.onpopstate = function(event) { callCallback(arg, location.pathname) };"
+      HR.call ctx cb "window.onpopstate = function(event) { callCallback(arg, location.pathname); };"
       pure chan
 
     logChan :: Chan String -> IO ()
@@ -48,20 +49,23 @@ route ctx initial f = do
       putStrLn e
       logChan chan
 
-    go :: a -> Chan String -> Widget HTML b
+    -- go :: a -> Chan String -> Widget HTML b
     go a chan = do
-      r <- orr [ Left <$> f a, Right <$> liftIO (readChan chan) ]
+      res <- liftIO $ async (readChan chan)
+      r <- orr [ Left <$> f a, Right <$> liftIO (wait res) ]
       case r of
         Left (UpdateChangeUrl a') -> do
-          liftIO $ putStrLn "pushing state"
-          liftIO $ HR.call ctx (toRoute a') "window.history.pushState(\"\", \"\", arg);"
+          -- liftIO $ putStrLn "pushing state"
+          liftIO $ HR.call ctx (toRoute a') "window.history.pushState({}, \"\", arg);"
+          liftIO $ cancel res
           go a' chan
 
-        Left (UpdateExit b) ->
+        Left (UpdateExit b) -> do
+          liftIO $ cancel res
           pure b
 
         Right path ->
-          liftIO (putStrLn "popstate callback received") *>
+          -- liftIO (putStrLn "popstate callback received") *>
           go (fromRoute path) chan
 
 --------------------------------------------------------------------------------
@@ -105,6 +109,7 @@ routingApp = \case
     pure $ UpdateChangeUrl SiteA
 
 main :: IO ()
-main =
+main = do
+  putStrLn "Starting"
   runDefault 8080 "Website" $
-    \ctx -> route ctx SiteA routingApp
+    \ctx -> liftIO (putStrLn "===== thread begins") *> route ctx SiteA routingApp
