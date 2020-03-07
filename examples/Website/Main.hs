@@ -39,7 +39,7 @@ route ctx initial f = do
     newHistoryChan = do
       chan <- newChan
       cb <- HR.registerCallback ctx $ \path -> writeChan chan path
-      HR.call ctx cb "window.onpopstate = function() { callCallback(arg, location.pathname); console.log(\"popstate callback complete \" + location.pathname); };"
+      HR.call ctx cb "window.onpopstate = function(event) { event.state === \"server-triggered\" ? console.log(\"pass\") : callCallback(arg, location.pathname); console.log(\"popstate callback fired \" + location.pathname); };"
       pure chan
 
     go :: a -> Chan String -> Widget HTML b
@@ -49,7 +49,7 @@ route ctx initial f = do
         Left (UpdateChangeUrl a') -> do
           -- liftIO $ threadDelay 500000
           liftIO $ putStrLn "pushing state"
-          liftIO $ HR.call ctx (toRoute a') "window.history.pushState(null, \"\", arg);"
+          liftIO $ HR.call ctx (toRoute a') "window.history.pushState(\"server-triggered\", \"\", arg);"
           go a' chan
 
         Left (UpdateExit b) ->
