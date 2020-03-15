@@ -8,7 +8,7 @@ extra-deps:
 - git: https://github.com/pkamenarsky/replica.git
   commit: 46d2fd3b2c236d573f1d6002eb58cc95b2ba03b9
 - git: https://github.com/pkamenarsky/concur.git
-  commit: e06c121d8cb506625a7a3ac5d6798e3185de424f
+  commit: dc5347b35c79654d58fa95716f425ee7248504fb
   subdirs:
     - concur-core
 flags: {}

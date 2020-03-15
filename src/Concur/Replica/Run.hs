@@ -1,8 +1,9 @@
 module Concur.Replica.Run where
 
-import           Concur.Core                     (SuspendF(StepView, StepIO, StepBlock, Forever), Widget, step)
+import           Concur.Core                     (SuspendF(StepView, StepIO, StepBlock, StepSTM, Forever), Widget, step)
 
 import           Control.Monad.Free              (Free(Pure, Free))
+import           Control.Concurrent.STM          (atomically)
 
 import qualified Data.Text                       as T
 
@@ -31,4 +32,5 @@ stepWidget ctx v = case v ctx of
   Free (StepView new next) -> pure $ Just (new, const next, \event -> fireEvent new (R.evtPath event) (R.evtType event) (DOMEvent $ R.evtEvent event))
   Free (StepIO io next)    -> io >>= stepWidget ctx . \r _ -> next r
   Free (StepBlock io next) -> io >>= stepWidget ctx . \r _ -> next r
+  Free (StepSTM stm next)  -> atomically stm >>= stepWidget ctx . \r _ -> next r
   Free Forever             -> pure Nothing

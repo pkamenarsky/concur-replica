@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e6db22a2de5e792c7d51e7e42c1c1b2ab5b1428a0545de174696e3bf46bf24fb
+-- hash: 0fff0d8ba8e0489c63837c3fc93d601c8ee3b2c7ef1b0cae3a8737468de46d4a
 
 name:           concur-replica
 version:        0.1.0.0
@@ -48,6 +48,7 @@ library
     , containers
     , free >=4.12
     , replica
+    , stm
     , text
     , transformers >=0.5
     , wai
@@ -72,6 +73,7 @@ executable concur-replica-calc
     , containers
     , free >=4.12
     , replica
+    , stm
     , text
     , transformers >=0.5
     , wai
@@ -97,6 +99,7 @@ executable concur-replica-hilo
     , free >=4.12
     , random
     , replica
+    , stm
     , text
     , transformers >=0.5
     , wai
@@ -121,6 +124,7 @@ executable concur-replica-menu
     , containers
     , free >=4.12
     , replica
+    , stm
     , text
     , transformers >=0.5
     , wai
@@ -145,6 +149,7 @@ executable concur-replica-misc
     , containers
     , free >=4.12
     , replica
+    , stm
     , text
     , transformers >=0.5
     , wai
@@ -170,6 +175,7 @@ executable concur-replica-multi-entry
     , free >=4.12
     , mtl
     , replica
+    , stm
     , text
     , transformers >=0.5
     , wai
@@ -194,6 +200,7 @@ executable concur-replica-routing
     , containers
     , free >=4.12
     , replica
+    , stm
     , text
     , transformers >=0.5
     , wai
@@ -218,6 +225,7 @@ executable concur-replica-select
     , containers
     , free >=4.12
     , replica
+    , stm
     , text
     , transformers >=0.5
     , wai
@@ -242,6 +250,7 @@ executable concur-replica-svg
     , containers
     , free >=4.12
     , replica
+    , stm
     , text
     , transformers >=0.5
     , wai

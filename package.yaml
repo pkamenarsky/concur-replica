@@ -21,6 +21,7 @@ dependencies:
 - concur-core
 - free >=4.12
 - replica
+- stm
 - text
 - transformers >=0.5
 - wai
