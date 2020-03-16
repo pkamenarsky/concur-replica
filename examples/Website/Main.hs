@@ -5,7 +5,13 @@
 
 -- | Mimic a static site with concur replica.
 --
--- WIP, but will eventually have server-rendered initial pages.
+-- Currently updates the URL as you move between pages,
+-- which allows you to use the back button.
+--
+-- WIP, and will eventually support:
+--
+-- + Going directly to pages by URL
+-- + Doing the rendering for initial pages on the server
 module Main where
 
 import Concur.Core (Widget, liftSTM, orr)
