@@ -18,7 +18,7 @@ This strategy is well understood due to its use by [Phoenix LiveView](https://he
 
 There are two situations where you should rule `concur-replica` out completely:
 
-+ Instant client-side feedback is required
++ Realtime client-side feedback is required (this is rarely the case)
 
 + It needs to work offline
 
