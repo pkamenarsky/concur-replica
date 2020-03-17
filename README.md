@@ -60,6 +60,10 @@ main :: IO ()
 main = runDefault 8080 "Counter" (counter 0)
 ```
 
+## Projects using concur-replica
+
+* [Unison Code Explorer](http://unison.readvar.com) - [Github repo](https://github.com/seagreen/unison-code-explorer)
+
 ## Running the examples
 
 The examples are mostly taken from `concur-react`, but there are a couple of new ones under `examples/Misc` as well.
