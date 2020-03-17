@@ -66,8 +66,6 @@ main = runDefault 8080 "Counter" (counter 0)
 
 ## Running the examples
 
-The examples are mostly taken from `concur-react`, but there are a couple of new ones under `examples/Misc` as well.
-
 ```
 stack build
 stack exec concur-replica-(calc|hilo|menu|misc|multi-entry|select|routing|website)
