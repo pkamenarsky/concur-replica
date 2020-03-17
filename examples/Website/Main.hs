@@ -1,26 +1,30 @@
 {-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
 -- | Mimic a static site with concur replica.
 --
--- WIP, but will eventually have URL path based routing
--- and server-rendered initial pages.
+-- Currently updates the URL as you move between pages,
+-- which allows you to use the back button.
+--
+-- WIP, and will eventually support:
+--
+-- + Going directly to pages by URL
+-- + Doing the rendering for initial pages on the server
 module Main where
 
-import Concur.Core (Widget, orr)
+import Concur.Core (Widget, liftSTM, orr)
 import Concur.Replica (runDefault)
-import Control.Concurrent
-import Control.Concurrent.Async
-import Control.Concurrent.Chan
+import Control.Concurrent.STM
 import Control.Monad.IO.Class (liftIO)
 import Data.Text (pack)
+import Network.Wai.Handler.Replica (Context(Context, call, registerCallback))
 import Prelude
 import Replica.VDOM (HTML)
 
 import qualified Concur.Replica.DOM as H
 import qualified Concur.Replica.DOM.Events as P
-import qualified Network.Wai.Handler.Replica as HR
 
 class Route a where
   fromRoute :: String -> a
@@ -30,42 +34,30 @@ data AppUpdate a b
   = UpdateChangeUrl a
   | UpdateExit b
 
-route :: forall a b. Route a => HR.Context -> a -> (a -> Widget HTML (AppUpdate a b)) -> Widget HTML b
-route ctx initial f = do
+route :: forall a b. Route a => Context -> a -> (a -> Widget HTML (AppUpdate a b)) -> Widget HTML b
+route Context{call, registerCallback} initial f = do
   chan <- liftIO newHistoryChan
   go initial chan
   where
-    newHistoryChan :: IO (Chan String)
+    newHistoryChan :: IO (TChan String)
     newHistoryChan = do
-      chan <- newChan
-      forkIO $ logChan =<< dupChan chan
-      cb <- HR.registerCallback ctx $ \path -> writeChan chan path
-      HR.call ctx cb "window.onpopstate = function(event) { callCallback(arg, location.pathname); };"
+      chan <- newTChanIO
+      cb <- registerCallback $ \path -> atomically (writeTChan chan path)
+      call cb "window.onpopstate = function(event) { callCallback(arg, location.pathname); };"
       pure chan
 
-    logChan :: Chan String -> IO ()
-    logChan chan = do
-      e <- readChan chan
-      putStrLn e
-      logChan chan
-
-    -- go :: a -> Chan String -> Widget HTML b
+    go :: a -> TChan String -> Widget HTML b
     go a chan = do
-      res <- liftIO $ async (readChan chan)
-      r <- orr [ Left <$> f a, Right <$> liftIO (wait res) ]
+      r <- orr [ Left <$> f a, Right <$> liftSTM (readTChan chan) ]
       case r of
         Left (UpdateChangeUrl a') -> do
-          -- liftIO $ putStrLn "pushing state"
-          liftIO $ HR.call ctx (toRoute a') "window.history.pushState({}, \"\", arg);"
-          liftIO $ cancel res
+          liftIO $ call (toRoute a') "window.history.pushState({}, \"\", arg);"
           go a' chan
 
-        Left (UpdateExit b) -> do
-          liftIO $ cancel res
+        Left (UpdateExit b) ->
           pure b
 
         Right path ->
-          -- liftIO (putStrLn "popstate callback received") *>
           go (fromRoute path) chan
 
 --------------------------------------------------------------------------------
@@ -82,17 +74,10 @@ instance Route State where
     SiteC c -> "/c-" <> show c
 
   fromRoute = \case
-    "/" ->
-      SiteA
-
-    '/':'b':'-':b ->
-      SiteB b
-
-    '/':'c':'-':c ->
-      SiteC (read c)
-
-    _ ->
-      error "Invalid URL"
+    "/"           -> SiteA
+    '/':'b':'-':b -> SiteB b
+    '/':'c':'-':c -> SiteC (read c)
+    _             -> error "Invalid URL"
 
 routingApp :: State -> Widget HTML (AppUpdate State ())
 routingApp = \case
@@ -110,6 +95,8 @@ routingApp = \case
 
 main :: IO ()
 main = do
-  putStrLn "Starting"
+  putStrLn "Starting app"
   runDefault 8080 "Website" $
-    \ctx -> liftIO (putStrLn "===== thread begins") *> route ctx SiteA routingApp
+    \ctx -> do
+      liftIO (putStrLn "Client connected")
+      route ctx SiteA routingApp

@@ -99,6 +99,5 @@ executables:
     main: Main.hs
     source-dirs: examples/Website
     dependencies:
-    - async
     - concur-replica
     - text

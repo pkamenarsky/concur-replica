@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 77d26dd0dff62ce14d548bf4af70f6ff76eb0cf97f94290e8028f21b102d782e
+-- hash: 695d1e961be2224fce5a208b4429164c10fa17ac2d07c449317b49cb5d8d4b6a
 
 name:           concur-replica
 version:        0.1.0.0
@@ -268,7 +268,6 @@ executable concur-replica-website
   ghc-options: -Wall -ferror-spans
   build-depends:
       aeson
-    , async
     , base >=4.7 && <5
     , bytestring
     , concur-core
