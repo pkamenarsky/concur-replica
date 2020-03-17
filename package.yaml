@@ -95,3 +95,9 @@ executables:
     dependencies:
     - concur-replica
     - text
+  concur-replica-website:
+    main: Main.hs
+    source-dirs: examples/Website
+    dependencies:
+    - concur-replica
+    - text
