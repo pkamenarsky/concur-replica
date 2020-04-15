@@ -51,6 +51,13 @@ executables:
     dependencies:
     - concur-replica
     - text
+  concur-replica-chat:
+    main: Main.hs
+    source-dirs: examples/Chat
+    dependencies:
+      - concur-replica
+      - stm
+      - text
   concur-replica-misc:
     main: Main.hs
     source-dirs: examples/Misc
