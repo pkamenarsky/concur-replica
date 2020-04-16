@@ -1,18 +1,17 @@
-{-# LANGUAGE PackageImports    #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Main where
 
-import           "base" Control.Applicative
-import           "base" Control.Monad.IO.Class              (liftIO)
-import           "concur-core" Concur.Core.Types            (Widget)
-import           "concur-replica" Concur.Replica            (HTML, runDefault)
-import           "concur-replica" Concur.Replica.DOM        (button, input, li, text, ul)
-import           "concur-replica" Concur.Replica.DOM.Events (BaseEvent (target), onClick, onInput, targetValue)
-import           "concur-replica" Concur.Replica.DOM.Props  (value)
-import           "text" Data.Text                           (Text)
-import           "stm" Control.Concurrent.STM               (TVar, atomically, modifyTVar', newTVarIO, readTVar)
-import           "stm" Control.Concurrent.STM.TChan         (TChan, dupTChan, newTChanIO, readTChan, writeTChan)
+import           Control.Applicative
+import           Control.Monad.IO.Class       (liftIO)
+import           Concur.Core.Types            (Widget)
+import           Concur.Replica               (HTML, runDefault)
+import           Concur.Replica.DOM           (button, input, li, text, ul)
+import           Concur.Replica.DOM.Events    (BaseEvent (target), onClick, onInput, targetValue)
+import           Concur.Replica.DOM.Props     (value)
+import           Data.Text                    (Text)
+import           Control.Concurrent.STM       (TVar, atomically, modifyTVar', newTVarIO, readTVar)
+import           Control.Concurrent.STM.TChan (TChan, dupTChan, newTChanIO, readTChan, writeTChan)
 
 -- A simple chat app demonstrating communication between clients using STM.
 -- The chatWidget is waiting for either the user to send a message or
