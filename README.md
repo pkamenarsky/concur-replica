@@ -68,7 +68,7 @@ main = runDefault 8080 "Counter" (counter 0)
 
 ```
 stack build
-stack exec concur-replica-(calc|hilo|menu|misc|multi-entry|select|routing|website)
+stack exec concur-replica-(calc|hilo|menu|misc|multi-entry|select|routing|website|chat)
 ```
 
 Point your browser to `http://localhost:8080` and behold the remote VDOM goodness.
