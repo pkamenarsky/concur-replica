@@ -18,7 +18,6 @@ dependencies:
 - aeson
 - bytestring
 - containers
-- concur-core
 - free >=4.12
 - replica
 - stm

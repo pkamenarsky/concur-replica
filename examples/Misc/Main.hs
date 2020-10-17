@@ -9,7 +9,6 @@ import qualified Data.Text as T
 
 import           Control.Exception
 import           Control.Monad.IO.Class
-import           Concur.Core (Widget, orr)
 import           Concur.Replica hiding (i)
 
 import qualified Prelude as P
@@ -21,7 +20,7 @@ data Todo = Todo
   , todoId :: Int
   } deriving Show
 
-inputOnEnter :: T.Text -> Widget HTML T.Text
+inputOnEnter :: T.Text -> UI HTML T.Text
 inputOnEnter v = do
   ev <- input [ autofocus True, placeholder "What needs to be done?", value v, Left <$> onInput, Right <$> onKeyDown ]
   case ev of
@@ -30,7 +29,7 @@ inputOnEnter v = do
       then pure v
       else inputOnEnter v
 
-todo :: Todo -> Widget HTML Todo
+todo :: Todo -> UI HTML Todo
 todo v = do
   ev <- div
     [ key $ T.pack $ show (todoId v), Left <$> onDoubleClick
@@ -47,7 +46,7 @@ todo v = do
       e <- div [] [ inputOnEnter (todoValue v) ]
       pure $ v { todoValue = e }
 
-todoList :: T.Text -> [Todo] -> Widget HTML [Todo]
+todoList :: T.Text -> [Todo] -> UI HTML [Todo]
 todoList flt vs = do
   (i, newEntry) <- div []
     [ orr $ flip mapMaybe (zip [0..] vs) $ \(i, v) -> if flt `T.isInfixOf` todoValue v
@@ -58,7 +57,7 @@ todoList flt vs = do
 
 data OneOf3 a b c = One3 a | Two3 b | Three3 c
 
-todos :: Widget HTML a
+todos :: UI HTML a
 todos = go 0 "" []
   where
     go vid filter' vs = do
@@ -74,7 +73,7 @@ todos = go 0 "" []
 
 --------------------------------------------------------------------------------
 
-counter :: Int -> Widget HTML a
+counter :: Int -> UI HTML a
 counter x = do
   click <- div [ className "test" ]
     [ Left <$> div [ onClick ] [ text "-" ]
@@ -88,7 +87,7 @@ counter x = do
 
 --------------------------------------------------------------------------------
 
-clientSidePrediction :: T.Text -> Widget HTML a
+clientSidePrediction :: T.Text -> UI HTML a
 clientSidePrediction v = do
   e <- div []
     [ input [ onInput, value v ]
@@ -104,7 +103,7 @@ clientSidePrediction v = do
 
 --------------------------------------------------------------------------------
 
-mouseEnterLeave :: Widget HTML a
+mouseEnterLeave :: UI HTML a
 mouseEnterLeave = go False
   where
     go inside = do
@@ -128,28 +127,21 @@ mouseEnterLeave = go False
 --------------------------------------------------------------------------------
 
 counterApp :: IO ()
-counterApp = runDefault 8080 "Counter" (\_ -> counter 0)
+counterApp = runDefault 3030 "Counter" (\_ -> counter 0)
 
 todosApp :: IO ()
-todosApp = runDefault 8080 "Todos" $ \_ -> todos
+todosApp = runDefault 3030 "Todos" $ \_ -> todos
 
 clientSidePredictionApp :: IO ()
 clientSidePredictionApp
-  = runDefault 8080 "Client side prediction test" (\_ -> clientSidePrediction "")
+  = runDefault 3030 "Client side prediction test" (\_ -> clientSidePrediction "")
 
 mouseEnterLeaveApp :: IO ()
-mouseEnterLeaveApp = runDefault 8080 "Mouse enter/leave test" $ \_ -> mouseEnterLeave
+mouseEnterLeaveApp = runDefault 3030 "Mouse enter/leave test" $ \_ -> mouseEnterLeave
 
 --------------------------------------------------------------------------------
 
-exWidget :: Widget HTML a
-exWidget = do
-  _ <- div [ onClick ] [ text "BOOM" ]
-  _ <- liftIO $ evaluate ((5 `P.div` (0 :: Int)))
-  _ <- text "asd"
-  exWidget
-
-dispatch :: Widget HTML ()
+dispatch :: UI HTML ()
 dispatch = do
  _ <- div []
    [ p [] [ text "Hello" ]
@@ -164,7 +156,7 @@ dispatch = do
    ]
  p [] [ text $ "You chose " <> c ]
 
-dispatch2 :: Widget HTML a
+dispatch2 :: UI HTML a
 dispatch2 = do
     _ <- div []
       [ p [] [ text "Hello" ]

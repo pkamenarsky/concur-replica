@@ -6,7 +6,6 @@ import qualified Data.Text              as T
 
 import           Control.Monad (forever)
 
-import           Concur.Core
 import           Concur.Replica hiding (a, b, i)
 
 import           Prelude hiding (div)
@@ -15,7 +14,7 @@ import           Prelude hiding (div)
 -- 1. This uses no state, as it was easy to build this using monadic flow
 -- 2. It was built by composing sub-widgets in a style that feels very functional.
 --    Top, open, menuItem, and menuButton are legitimate widgets on their own.
-menuWidget :: [(T.Text, [(a,T.Text)])] -> Widget HTML a
+menuWidget :: [(T.Text, [(a,T.Text)])] -> UI HTML a
 menuWidget cs = top 0 items >>= open items
   where
     items = menuItem <$> cs
@@ -30,7 +29,7 @@ menuWidget cs = top 0 items >>= open items
     menuButton (ret,str) = ret <$ button [onClick] [text str]
 
 main :: IO ()
-main = runDefault 8080 "Menu" $ \_ -> forever $ do
+main = runDefault 3030 "Menu" $ \_ -> forever $ do
   v <- menuWidget items
   div [] $ [text $ "You picked - " <> v, button [onClick] [text "Restart"]]
   where
