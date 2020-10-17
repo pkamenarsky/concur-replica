@@ -4,7 +4,6 @@ module Main where
 
 import Control.Monad.IO.Class
 
-import Concur.Core
 import Concur.Replica hiding (s)
 import Replica.VDOM (HTML)
 
@@ -18,7 +17,7 @@ data CalculatorAction = Plus | Minus | Times | Div | Enter | Clear | Digit Int
   deriving Show
 
 -- Button pad widget
-calcButtonsWidget :: Widget HTML CalculatorAction
+calcButtonsWidget :: UI HTML CalculatorAction
 calcButtonsWidget = div []
   [ div [] [d 7, d 8, d 9, opDiv]
   , div [] [d 4, d 5, d 6, opTimes]
@@ -51,8 +50,8 @@ new :: Int -> [Int] -> ([Int], Int)
 new n s = (n:s, n)
 
 -- Hooking up everything is pretty easy as can be seen in `mainStandard`
-mainStandard :: IO ()
-mainStandard = runDefault 80 "Calculator" $ \_ -> go 0 []
+main :: IO ()
+main = runDefault 3030 "Calculator" $ \_ -> go 0 []
   where
     go n s = do
       x <- orr [text (T.pack $ show (s, n)), calcButtonsWidget]
@@ -67,7 +66,7 @@ mainStandard = runDefault 80 "Calculator" $ \_ -> go 0 []
 -- We first create a widget that handles wiring up the buttons and calculation
 -- Notice the extremely straightforward flow.
 -- We also don't need to worry WHERE and HOW the result is displayed
-buttonsWidget :: (Int -> Widget HTML ()) -> Widget HTML y
+buttonsWidget :: (Int -> UI HTML ()) -> UI HTML y
 buttonsWidget showResultWidget = go []
   where
     -- This Widget effectively -
@@ -81,15 +80,9 @@ buttonsWidget showResultWidget = go []
       -- 4. Repeats
       go st'
 
--- Create a remote calculator display which can be controlled by other widgets
-makeCalcDisplay :: Widget HTML (Int -> Widget HTML (), Widget HTML x)
-makeCalcDisplay = liftIO $ remoteWidget defaultDisplay handleResult
-  where
-    defaultDisplay = text "This display is controlled by other widgets. GO AHEAD. PRESS A BUTTON."
-    handleResult res = text $ T.pack $ show res
-
--- Now we wire them together easily
-main :: IO ()
-main = runDefault 8080 "Calculator" $ \ctx -> do
-  (showResult, calcDisp) <- makeCalcDisplay
-  div [] [calcDisp, buttonsWidget showResult]
+-- -- Create a remote calculator display which can be controlled by other widgets
+-- makeCalcDisplay :: UI HTML (Int -> UI HTML (), UI HTML x)
+-- makeCalcDisplay = liftIO $ remoteWidget defaultDisplay handleResult
+--   where
+--     defaultDisplay = text "This display is controlled by other widgets. GO AHEAD. PRESS A BUTTON."
+--     handleResult res = text $ T.pack $ show res

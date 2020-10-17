@@ -2,7 +2,6 @@
 
 module Main where
 
-import Concur.Core (Widget)
 import Concur.Replica
 import Prelude hiding (div)
 import Replica.VDOM (HTML)
@@ -14,7 +13,7 @@ import qualified Concur.Replica.SVG.Props as SP
 xmlns :: Props a
 xmlns = textProp "xmlns" "http://www.w3.org/2000/svg"
 
-app :: Widget HTML a
+app :: UI HTML a
 app = do
   _ <-
     div []
@@ -33,4 +32,4 @@ app = do
     ]
 
 main :: IO ()
-main = runDefault 8080 "SVG" $ \_ -> app
+main = runDefault 3030 "SVG" $ \_ -> app

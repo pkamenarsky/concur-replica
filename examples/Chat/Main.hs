@@ -3,9 +3,7 @@
 module Main where
 
 import           Control.Applicative
-import           Control.Monad.IO.Class       (liftIO)
-import           Concur.Core.Types            (Widget)
-import           Concur.Replica               (HTML, runDefault)
+import           Concur.Replica
 import           Concur.Replica.DOM           (button, input, li, text, ul)
 import           Concur.Replica.DOM.Events    (BaseEvent (target), onClick, onInput, targetValue)
 import           Concur.Replica.DOM.Props     (value)
@@ -30,26 +28,26 @@ data ChatAction
     | NewMessagePosted
 
 
-chatWidget :: TVar [Message] -> TChan () -> Widget HTML Message
+chatWidget :: TVar [Message] -> TChan () -> UI HTML Message
 chatWidget msgsTVar messageAlert = do
-    messageHistory <- liftIO . atomically . readTVar $ msgsTVar
+    messageHistory <- liftSTM $ readTVar msgsTVar
     -- Render messageList and messageEditor and wait for user to send
     let newMessageToPost = NewMessageToPost <$> (messageEditor "" <|> messagesList messageHistory)
     -- Wait for a message from other user
-    let newMessagePosted = NewMessagePosted <$ (liftIO . atomically . readTChan $ messageAlert)
+    let newMessagePosted = NewMessagePosted <$ (liftSTM . readTChan $ messageAlert)
     -- Wait for whatever chatAction to happen first
     chatAction <- newMessageToPost <|> newMessagePosted
     case chatAction of
         NewMessagePosted -> chatWidget msgsTVar messageAlert
         NewMessageToPost newMessage -> do
-            liftIO . atomically $ do
+            liftSTM $ do
                 -- Add this message to the messageHistory
                 modifyTVar' msgsTVar (newMessage :)
                 -- Notify all clients about the updates
                 writeTChan messageAlert ()
             chatWidget msgsTVar messageAlert
 
-messageEditor :: Message -> Widget HTML Message
+messageEditor :: Message -> UI HTML Message
 messageEditor typing = do
     let textInput = Typing . targetValue . target <$> input [value $ typing, onInput]
     let submitButton = Send typing <$ button [onClick] [text "Send"]
@@ -59,10 +57,10 @@ messageEditor typing = do
         Typing tm -> messageEditor tm
         Send msg -> pure msg
 
-messagesList :: [Message] -> Widget HTML Message
+messagesList :: [Message] -> UI HTML Message
 messagesList messageHistory = ul [] $ messageItem <$> messageHistory
 
-messageItem :: Message -> Widget HTML Message
+messageItem :: Message -> UI HTML Message
 messageItem message = li [] [text message]
 
 
@@ -71,5 +69,5 @@ main = do
     -- Channel to alert other clients that the messageHistory is updated
     messageAlert <- newTChanIO
     messageHistory <- newTVarIO []
-    runDefault 8080 "Chat" $ \_ -> chatWidget messageHistory
-        =<< (liftIO . atomically $ dupTChan messageAlert)
+    runDefault 3030 "Chat" $ \_ -> chatWidget messageHistory
+        =<< (liftSTM $ dupTChan messageAlert)
