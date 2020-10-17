@@ -171,5 +171,28 @@ dispatch2 = do
 
 --------------------------------------------------------------------------------
 
+anddTest :: IO ()
+anddTest = do
+  runDefault 3030 "HiLo" $ \_ -> do
+    div []
+      [ text "TITLE"
+      , do
+          -- r <- (:) <$> counter 0 <**> ((:) <$> counter 0 <**> fmap pure (counter 0))
+          -- text $ "Done: " <> T.pack (show r)
+          -- r <- (,,) <$> counter 0 <**> counter 0 <**> counter 0
+          -- text $ "Done: " <> T.pack (show r)
+          -- andd [counter 0, counter 0, counter 0]
+          text $ "Done"
+      ]
+  where
+    counter x
+      | x > 5 = do
+          div [ onClick ] [ text "Kill" ]
+          pure x
+      | otherwise = do
+          div [ onClick ] [ text (T.pack $ show x) ]
+          counter (x + 1)
+
+
 main :: IO ()
 main = todosApp
