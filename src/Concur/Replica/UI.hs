@@ -51,7 +51,7 @@ instance Alternative Step where
 --------------------------------------------------------------------------------
 
 removeEvents :: VDOM -> VDOM
-removeEvents (VNode e attrs ns chs) = VNode e (removeEventsA attrs) ns chs
+removeEvents (VNode e attrs ns chs) = VNode e (removeEventsA attrs) ns (fmap removeEvents chs)
 removeEvents (VLeaf e attrs ns) = VLeaf e (removeEventsA attrs) ns
 removeEvents n = n
 
