@@ -1,15 +1,11 @@
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE ExistentialQuantification #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Main where
 
-import Control.Concurrent
-import Control.Concurrent.STM
-import Control.Concurrent.STM.TMVar
+import Concur.Core (Widget, orr)
+import Control.Monad.IO.Class (liftIO)
 import Control.Concurrent.Chan
 import Concur.Replica
-import Control.Monad (forever)
 import Data.Maybe
 import Data.Text (Text, pack)
 import Replica.VDOM (HTML)
@@ -22,8 +18,8 @@ class Route a where
   fromRoute :: String -> a
   toRoute :: a -> String
 
-route :: Route a => (forall x. IO x -> UI HTML x) -> R.Context -> a -> (a -> UI HTML (Either a b)) -> UI HTML b
-route liftIO ctx a f = do
+route :: Route a => R.Context -> a -> (a -> Widget HTML (Either a b)) -> Widget HTML b
+route ctx a f = do
   chan <- liftIO $ do
     chan <- newChan :: IO (Chan String)
     cb <- R.registerCallback ctx $ \hash -> writeChan chan hash
@@ -58,7 +54,7 @@ instance Route State where
   fromRoute ('b':':':b) = SiteB b
   fromRoute ('c':':':c) = SiteC (read c)
 
-routingApp :: State -> UI HTML (Either State ())
+routingApp :: State -> Widget HTML (Either State ())
 routingApp (SiteA a) = do
   div [ onClick ] [ text ("Site A: " <> pack (show a)) ]
   pure $ Left (SiteB "Next")
@@ -69,22 +65,5 @@ routingApp (SiteC c) = do
   div [ onClick ] [ text ("Site C: " <> pack (show c)) ]
   pure $ Left (SiteA 666)
 
-data LiftIO = forall a. LiftIO (IO a) (a -> IO ())
-
 main :: IO ()
-main = do
-
-  iovar <- newEmptyTMVarIO :: IO (TMVar LiftIO)
-
-  _ <- forkIO $ forever $ do
-    LiftIO io put <- atomically $ takeTMVar iovar
-    forkIO $ io >>= put
-
-  let liftIO io = do
-        v <- liftNonBlockingSTM $ do
-          v <- newEmptyTMVar
-          putTMVar iovar $ LiftIO io (atomically . putTMVar v)
-          pure v
-        liftSTM $ takeTMVar v
-
-  runDefault 3030 "Select" $ \ctx -> route liftIO ctx (SiteA 0) routingApp
+main = runDefault 8080 "Select" $ \ctx -> route ctx (SiteA 0) routingApp

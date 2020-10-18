@@ -1,8 +1,6 @@
-{-# LANGUAGE ExistentialQuantification #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
 -- | Mimic a static site with concur replica.
@@ -16,11 +14,10 @@
 -- + Doing the rendering for initial pages on the server
 module Main where
 
-import Concur.Replica
-import Control.Concurrent
+import Concur.Core (Widget, liftSTM, orr)
+import Concur.Replica (runDefault)
 import Control.Concurrent.STM
-import Control.Concurrent.STM.TMVar
-import Control.Monad (forever)
+import Control.Monad.IO.Class (liftIO)
 import Data.Text (pack)
 import Network.Wai.Handler.Replica (Context(Context, call, registerCallback))
 import Prelude
@@ -37,8 +34,8 @@ data AppUpdate a b
   = UpdateChangeUrl a
   | UpdateExit b
 
-route :: forall a b. Route a => (forall x. IO x -> UI HTML x) -> Context -> a -> (a -> UI HTML (AppUpdate a b)) -> UI HTML b
-route liftIO Context{call, registerCallback} initial f = do
+route :: forall a b. Route a => Context -> a -> (a -> Widget HTML (AppUpdate a b)) -> Widget HTML b
+route Context{call, registerCallback} initial f = do
   chan <- liftIO newHistoryChan
   go initial chan
   where
@@ -49,7 +46,7 @@ route liftIO Context{call, registerCallback} initial f = do
       call cb "window.onpopstate = function(event) { callCallback(arg, location.pathname); };"
       pure chan
 
-    go :: a -> TChan String -> UI HTML b
+    go :: a -> TChan String -> Widget HTML b
     go a chan = do
       r <- orr [ Left <$> f a, Right <$> liftSTM (readTChan chan) ]
       case r of
@@ -82,7 +79,7 @@ instance Route State where
     '/':'c':'-':c -> SiteC (read c)
     _             -> error "Invalid URL"
 
-routingApp :: State -> UI HTML (AppUpdate State ())
+routingApp :: State -> Widget HTML (AppUpdate State ())
 routingApp = \case
   SiteA -> do
     _ <- H.div [ P.onClick ] [ H.text ("Site A (click for next site)") ]
@@ -96,23 +93,10 @@ routingApp = \case
     _ <- H.div [ P.onClick ] [ H.text ("Site C: " <> pack (show c)) ]
     pure $ UpdateChangeUrl SiteA
 
-data LiftIO = forall a. LiftIO (IO a) (a -> IO ())
-
 main :: IO ()
 main = do
-  iovar <- newEmptyTMVarIO :: IO (TMVar LiftIO)
-
-  _ <- forkIO $ forever $ do
-    LiftIO io put <- atomically $ takeTMVar iovar
-    forkIO $ io >>= put
-
-  let liftIO io = do
-        v <- liftNonBlockingSTM $ do
-          v <- newEmptyTMVar
-          putTMVar iovar $ LiftIO io (atomically . putTMVar v)
-          pure v
-        liftSTM $ takeTMVar v
-
   putStrLn "Starting app"
-  runDefault 3030 "Website" $ \ctx -> do
-    route liftIO ctx SiteA routingApp
+  runDefault 8080 "Website" $
+    \ctx -> do
+      liftIO (putStrLn "Client connected")
+      route ctx SiteA routingApp

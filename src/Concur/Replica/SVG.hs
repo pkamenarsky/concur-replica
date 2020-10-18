@@ -1,4 +1,6 @@
+{-# LANGUAGE FlexibleContexts    #-}
 {-# LANGUAGE OverloadedStrings   #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 -- | SVG elements
 --
@@ -8,234 +10,231 @@ module Concur.Replica.SVG where
 -- Note that this module is auto-generated.
 -- See @./misc/gen-svg-modules@ for details.
 
-import           Concur.Replica.UI        (UI)
-
-import           Concur.Replica.DOM       (elWithNamespace)
+import           Concur.Replica.DOM       (WidgetConstraints, elWithNamespace)
 import           Concur.Replica.DOM.Props (Props)
 
 import qualified Data.Text                as T
 
-import           Replica.VDOM             (HTML)
 import           Replica.VDOM.Types       (Namespace(Namespace))
 
 -- | Helper function for creating SVG elements.
-el :: T.Text -> [Props a] -> [UI HTML a] -> UI HTML a
+el :: forall m a. WidgetConstraints m => T.Text -> [Props a] -> [m a] -> m a
 el = elWithNamespace (Just (Namespace "http://www.w3.org/2000/svg"))
 
 -- * SVG Elements
 
-animate :: [Props a] -> [UI HTML a] -> UI HTML a
+animate :: WidgetConstraints m => [Props a] -> [m a] -> m a
 animate = el "animate"
 
-animateMotion :: [Props a] -> [UI HTML a] -> UI HTML a
+animateMotion :: WidgetConstraints m => [Props a] -> [m a] -> m a
 animateMotion = el "animateMotion"
 
-animateTransform :: [Props a] -> [UI HTML a] -> UI HTML a
+animateTransform :: WidgetConstraints m => [Props a] -> [m a] -> m a
 animateTransform = el "animateTransform"
 
-circle :: [Props a] -> [UI HTML a] -> UI HTML a
+circle :: WidgetConstraints m => [Props a] -> [m a] -> m a
 circle = el "circle"
 
-clipPath :: [Props a] -> [UI HTML a] -> UI HTML a
+clipPath :: WidgetConstraints m => [Props a] -> [m a] -> m a
 clipPath = el "clipPath"
 
-colorProfile :: [Props a] -> [UI HTML a] -> UI HTML a
+colorProfile :: WidgetConstraints m => [Props a] -> [m a] -> m a
 colorProfile = el "color-profile"
 
-defs :: [Props a] -> [UI HTML a] -> UI HTML a
+defs :: WidgetConstraints m => [Props a] -> [m a] -> m a
 defs = el "defs"
 
-desc :: [Props a] -> [UI HTML a] -> UI HTML a
+desc :: WidgetConstraints m => [Props a] -> [m a] -> m a
 desc = el "desc"
 
-discard :: [Props a] -> [UI HTML a] -> UI HTML a
+discard :: WidgetConstraints m => [Props a] -> [m a] -> m a
 discard = el "discard"
 
-ellipse :: [Props a] -> [UI HTML a] -> UI HTML a
+ellipse :: WidgetConstraints m => [Props a] -> [m a] -> m a
 ellipse = el "ellipse"
 
-feBlend :: [Props a] -> [UI HTML a] -> UI HTML a
+feBlend :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feBlend = el "feBlend"
 
-feColorMatrix :: [Props a] -> [UI HTML a] -> UI HTML a
+feColorMatrix :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feColorMatrix = el "feColorMatrix"
 
-feComponentTransfer :: [Props a] -> [UI HTML a] -> UI HTML a
+feComponentTransfer :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feComponentTransfer = el "feComponentTransfer"
 
-feComposite :: [Props a] -> [UI HTML a] -> UI HTML a
+feComposite :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feComposite = el "feComposite"
 
-feConvolveMatrix :: [Props a] -> [UI HTML a] -> UI HTML a
+feConvolveMatrix :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feConvolveMatrix = el "feConvolveMatrix"
 
-feDiffuseLighting :: [Props a] -> [UI HTML a] -> UI HTML a
+feDiffuseLighting :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feDiffuseLighting = el "feDiffuseLighting"
 
-feDisplacementMap :: [Props a] -> [UI HTML a] -> UI HTML a
+feDisplacementMap :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feDisplacementMap = el "feDisplacementMap"
 
-feDistantLight :: [Props a] -> [UI HTML a] -> UI HTML a
+feDistantLight :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feDistantLight = el "feDistantLight"
 
-feDropShadow :: [Props a] -> [UI HTML a] -> UI HTML a
+feDropShadow :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feDropShadow = el "feDropShadow"
 
-feFlood :: [Props a] -> [UI HTML a] -> UI HTML a
+feFlood :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feFlood = el "feFlood"
 
-feFuncA :: [Props a] -> [UI HTML a] -> UI HTML a
+feFuncA :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feFuncA = el "feFuncA"
 
-feFuncB :: [Props a] -> [UI HTML a] -> UI HTML a
+feFuncB :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feFuncB = el "feFuncB"
 
-feFuncG :: [Props a] -> [UI HTML a] -> UI HTML a
+feFuncG :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feFuncG = el "feFuncG"
 
-feFuncR :: [Props a] -> [UI HTML a] -> UI HTML a
+feFuncR :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feFuncR = el "feFuncR"
 
-feGaussianBlur :: [Props a] -> [UI HTML a] -> UI HTML a
+feGaussianBlur :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feGaussianBlur = el "feGaussianBlur"
 
-feImage :: [Props a] -> [UI HTML a] -> UI HTML a
+feImage :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feImage = el "feImage"
 
-feMerge :: [Props a] -> [UI HTML a] -> UI HTML a
+feMerge :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feMerge = el "feMerge"
 
-feMergeNode :: [Props a] -> [UI HTML a] -> UI HTML a
+feMergeNode :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feMergeNode = el "feMergeNode"
 
-feMorphology :: [Props a] -> [UI HTML a] -> UI HTML a
+feMorphology :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feMorphology = el "feMorphology"
 
-feOffset :: [Props a] -> [UI HTML a] -> UI HTML a
+feOffset :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feOffset = el "feOffset"
 
-fePointLight :: [Props a] -> [UI HTML a] -> UI HTML a
+fePointLight :: WidgetConstraints m => [Props a] -> [m a] -> m a
 fePointLight = el "fePointLight"
 
-feSpecularLighting :: [Props a] -> [UI HTML a] -> UI HTML a
+feSpecularLighting :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feSpecularLighting = el "feSpecularLighting"
 
-feSpotLight :: [Props a] -> [UI HTML a] -> UI HTML a
+feSpotLight :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feSpotLight = el "feSpotLight"
 
-feTile :: [Props a] -> [UI HTML a] -> UI HTML a
+feTile :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feTile = el "feTile"
 
-feTurbulence :: [Props a] -> [UI HTML a] -> UI HTML a
+feTurbulence :: WidgetConstraints m => [Props a] -> [m a] -> m a
 feTurbulence = el "feTurbulence"
 
-filter :: [Props a] -> [UI HTML a] -> UI HTML a
+filter :: WidgetConstraints m => [Props a] -> [m a] -> m a
 filter = el "filter"
 
-foreignObject :: [Props a] -> [UI HTML a] -> UI HTML a
+foreignObject :: WidgetConstraints m => [Props a] -> [m a] -> m a
 foreignObject = el "foreignObject"
 
-g :: [Props a] -> [UI HTML a] -> UI HTML a
+g :: WidgetConstraints m => [Props a] -> [m a] -> m a
 g = el "g"
 
-hatch :: [Props a] -> [UI HTML a] -> UI HTML a
+hatch :: WidgetConstraints m => [Props a] -> [m a] -> m a
 hatch = el "hatch"
 
-hatchpath :: [Props a] -> [UI HTML a] -> UI HTML a
+hatchpath :: WidgetConstraints m => [Props a] -> [m a] -> m a
 hatchpath = el "hatchpath"
 
-image :: [Props a] -> [UI HTML a] -> UI HTML a
+image :: WidgetConstraints m => [Props a] -> [m a] -> m a
 image = el "image"
 
-line :: [Props a] -> [UI HTML a] -> UI HTML a
+line :: WidgetConstraints m => [Props a] -> [m a] -> m a
 line = el "line"
 
-linearGradient :: [Props a] -> [UI HTML a] -> UI HTML a
+linearGradient :: WidgetConstraints m => [Props a] -> [m a] -> m a
 linearGradient = el "linearGradient"
 
-marker :: [Props a] -> [UI HTML a] -> UI HTML a
+marker :: WidgetConstraints m => [Props a] -> [m a] -> m a
 marker = el "marker"
 
-mask :: [Props a] -> [UI HTML a] -> UI HTML a
+mask :: WidgetConstraints m => [Props a] -> [m a] -> m a
 mask = el "mask"
 
-mesh :: [Props a] -> [UI HTML a] -> UI HTML a
+mesh :: WidgetConstraints m => [Props a] -> [m a] -> m a
 mesh = el "mesh"
 
-meshgradient :: [Props a] -> [UI HTML a] -> UI HTML a
+meshgradient :: WidgetConstraints m => [Props a] -> [m a] -> m a
 meshgradient = el "meshgradient"
 
-meshpatch :: [Props a] -> [UI HTML a] -> UI HTML a
+meshpatch :: WidgetConstraints m => [Props a] -> [m a] -> m a
 meshpatch = el "meshpatch"
 
-meshrow :: [Props a] -> [UI HTML a] -> UI HTML a
+meshrow :: WidgetConstraints m => [Props a] -> [m a] -> m a
 meshrow = el "meshrow"
 
-metadata :: [Props a] -> [UI HTML a] -> UI HTML a
+metadata :: WidgetConstraints m => [Props a] -> [m a] -> m a
 metadata = el "metadata"
 
-mpath :: [Props a] -> [UI HTML a] -> UI HTML a
+mpath :: WidgetConstraints m => [Props a] -> [m a] -> m a
 mpath = el "mpath"
 
-path :: [Props a] -> [UI HTML a] -> UI HTML a
+path :: WidgetConstraints m => [Props a] -> [m a] -> m a
 path = el "path"
 
-pattern :: [Props a] -> [UI HTML a] -> UI HTML a
+pattern :: WidgetConstraints m => [Props a] -> [m a] -> m a
 pattern = el "pattern"
 
-polygon :: [Props a] -> [UI HTML a] -> UI HTML a
+polygon :: WidgetConstraints m => [Props a] -> [m a] -> m a
 polygon = el "polygon"
 
-polyline :: [Props a] -> [UI HTML a] -> UI HTML a
+polyline :: WidgetConstraints m => [Props a] -> [m a] -> m a
 polyline = el "polyline"
 
-radialGradient :: [Props a] -> [UI HTML a] -> UI HTML a
+radialGradient :: WidgetConstraints m => [Props a] -> [m a] -> m a
 radialGradient = el "radialGradient"
 
-rect :: [Props a] -> [UI HTML a] -> UI HTML a
+rect :: WidgetConstraints m => [Props a] -> [m a] -> m a
 rect = el "rect"
 
-script :: [Props a] -> [UI HTML a] -> UI HTML a
+script :: WidgetConstraints m => [Props a] -> [m a] -> m a
 script = el "script"
 
-set :: [Props a] -> [UI HTML a] -> UI HTML a
+set :: WidgetConstraints m => [Props a] -> [m a] -> m a
 set = el "set"
 
-solidcolor :: [Props a] -> [UI HTML a] -> UI HTML a
+solidcolor :: WidgetConstraints m => [Props a] -> [m a] -> m a
 solidcolor = el "solidcolor"
 
-stop :: [Props a] -> [UI HTML a] -> UI HTML a
+stop :: WidgetConstraints m => [Props a] -> [m a] -> m a
 stop = el "stop"
 
-style :: [Props a] -> [UI HTML a] -> UI HTML a
+style :: WidgetConstraints m => [Props a] -> [m a] -> m a
 style = el "style"
 
-svg :: [Props a] -> [UI HTML a] -> UI HTML a
+svg :: WidgetConstraints m => [Props a] -> [m a] -> m a
 svg = el "svg"
 
-switch :: [Props a] -> [UI HTML a] -> UI HTML a
+switch :: WidgetConstraints m => [Props a] -> [m a] -> m a
 switch = el "switch"
 
-symbol :: [Props a] -> [UI HTML a] -> UI HTML a
+symbol :: WidgetConstraints m => [Props a] -> [m a] -> m a
 symbol = el "symbol"
 
-text :: [Props a] -> [UI HTML a] -> UI HTML a
+text :: WidgetConstraints m => [Props a] -> [m a] -> m a
 text = el "text"
 
-textPath :: [Props a] -> [UI HTML a] -> UI HTML a
+textPath :: WidgetConstraints m => [Props a] -> [m a] -> m a
 textPath = el "textPath"
 
-title :: [Props a] -> [UI HTML a] -> UI HTML a
+title :: WidgetConstraints m => [Props a] -> [m a] -> m a
 title = el "title"
 
-tspan :: [Props a] -> [UI HTML a] -> UI HTML a
+tspan :: WidgetConstraints m => [Props a] -> [m a] -> m a
 tspan = el "tspan"
 
-unknown :: [Props a] -> [UI HTML a] -> UI HTML a
+unknown :: WidgetConstraints m => [Props a] -> [m a] -> m a
 unknown = el "unknown"
 
-use :: [Props a] -> [UI HTML a] -> UI HTML a
+use :: WidgetConstraints m => [Props a] -> [m a] -> m a
 use = el "use"
 
-view :: [Props a] -> [UI HTML a] -> UI HTML a
+view :: WidgetConstraints m => [Props a] -> [m a] -> m a
 view = el "view"

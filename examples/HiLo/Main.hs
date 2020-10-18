@@ -3,24 +3,21 @@
 
 module Main where
 
-import           Control.Concurrent
-import           Control.Concurrent.STM
-import           Control.Concurrent.STM.TMVar
-
 import           Control.Applicative    ((<|>))
 import           Control.Monad          (forever)
 import           Control.Monad.IO.Class (liftIO)
 
 import qualified Data.Text              as T
 
-import qualified System.Random          as R
+import           System.Random          as R
 import           Text.Read              (readMaybe)
 
+import           Concur.Core
 import           Concur.Replica
 
 import           Prelude hiding (div)
 
-inputEnter :: T.Text -> UI HTML T.Text
+inputEnter :: T.Text -> Widget HTML T.Text
 inputEnter v = do
   ev <- input [ autofocus True, value v, Left <$> onInput, Right <$> onKeyDown ]
   case ev of
@@ -32,17 +29,11 @@ inputEnter v = do
 -- Hi/Lo Game. Demonstrates simple architecture of a Concur app.
 -- Also a good demonstration of how Concur makes IO effects safe at widget transitions (the random number generation).
 main :: IO ()
-main = do
-  rnd <- newEmptyTMVarIO
-
-  _ <- forkIO $ forever $ do
-    r <- R.randomRIO (1 :: Int, 100)
-    atomically $ putTMVar rnd r
-    
-  runDefault 3030 "HiLo" $ \_ -> forever $ do
-    h1 [] [text "I'm thinking of a number between 1 and 100"] <|> (liftSTM (takeTMVar rnd) >>= go)
+main = runDefault 8080 "HiLo" $ \_ -> forever $ do
+  h1 [] [text "I'm thinking of a number between 1 and 100"]
+  <|> (liftIO (R.randomRIO (1,100)) >>= go)
   where
-    go :: Int -> UI HTML ()
+    go :: Int -> Widget HTML ()
     go n = do
       guessStr <- div []
         [ text "Try to guess: "

@@ -9,6 +9,7 @@ import qualified Data.Text              as T
 import           Control.Monad        (forever, void)
 import           Control.Monad.State  (execStateT, get, put, lift)
 
+import           Concur.Core
 import           Concur.Replica
 
 import           Prelude hiding (div)
@@ -16,7 +17,7 @@ import           Prelude hiding (div)
 type MenuItems a = [(a,T.Text)]
 
 -- A Double menu, where the entries in the second menu depend on the first
-doubleMenu :: T.Text -> T.Text -> MenuItems a -> (a -> MenuItems b) -> UI HTML b
+doubleMenu :: T.Text -> T.Text -> MenuItems a -> (a -> MenuItems b) -> Widget HTML b
 doubleMenu label1 label2 items f = menu1 >>= go
   where
     menu1 = menuWidget label1 items
@@ -24,7 +25,7 @@ doubleMenu label1 label2 items f = menu1 >>= go
     go x = orr [fmap Left menu1, fmap Right (menu2 x)] >>= either go return
 
 -- A simple select menu
-menuWidget :: T.Text -> MenuItems a -> UI HTML a
+menuWidget :: T.Text -> MenuItems a -> Widget HTML a
 menuWidget label' items = div [className "menu"]
   [ do
       _ <- button [onClick] [text label']
@@ -43,7 +44,7 @@ entriesStateInit :: Int -> EntriesState
 entriesStateInit n = EntriesState $ replicate n entryStateInit
 
 -- Widget that allows the user to add an item to an entry
-entryWidget :: EntryState -> UI HTML EntryState
+entryWidget :: EntryState -> Widget HTML EntryState
 entryWidget (EntryState {..}) = go color
   where
     go col' =
@@ -64,7 +65,7 @@ entryWidget (EntryState {..}) = go color
 
 -- Main
 main :: IO ()
-main = void $ runDefault 3030 "MultiEntry" $ \_ -> flip execStateT (entriesStateInit 5) $ forever $ do
+main = void $ runDefault 8080 "MultiEntry" $ \_ -> flip execStateT (entriesStateInit 5) $ forever $ do
     EntriesState {..} <- get
     (i', e') <- lift $ orr (renderEntry <$> zip [0..] entries)
     put $ EntriesState (take i' entries ++ [e'] ++ drop (i'+1) entries)

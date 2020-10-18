@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.31.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5be9d07343a010713b3355b9b36a9052fa371cc623a8b6e9a2c8d6c3076b9d84
+-- hash: 695d1e961be2224fce5a208b4429164c10fa17ac2d07c449317b49cb5d8d4b6a
 
 name:           concur-replica
 version:        0.1.0.0
@@ -36,7 +36,6 @@ library
       Concur.Replica.SVG
       Concur.Replica.SVG.Props
   other-modules:
-      Concur.Replica.UI
       Paths_concur_replica
   hs-source-dirs:
       src
@@ -45,6 +44,7 @@ library
       aeson
     , base >=4.7 && <5
     , bytestring
+    , concur-core
     , containers
     , free >=4.12
     , replica
@@ -68,30 +68,7 @@ executable concur-replica-calc
       aeson
     , base >=4.7 && <5
     , bytestring
-    , concur-replica
-    , containers
-    , free >=4.12
-    , replica
-    , stm
-    , text
-    , transformers >=0.5
-    , wai
-    , wai-websockets
-    , warp
-    , websockets
-  default-language: Haskell2010
-
-executable concur-replica-chat
-  main-is: Main.hs
-  other-modules:
-      Paths_concur_replica
-  hs-source-dirs:
-      examples/Chat
-  ghc-options: -Wall -ferror-spans
-  build-depends:
-      aeson
-    , base >=4.7 && <5
-    , bytestring
+    , concur-core
     , concur-replica
     , containers
     , free >=4.12
@@ -116,6 +93,7 @@ executable concur-replica-hilo
       aeson
     , base >=4.7 && <5
     , bytestring
+    , concur-core
     , concur-replica
     , containers
     , free >=4.12
@@ -141,6 +119,7 @@ executable concur-replica-menu
       aeson
     , base >=4.7 && <5
     , bytestring
+    , concur-core
     , concur-replica
     , containers
     , free >=4.12
@@ -165,6 +144,7 @@ executable concur-replica-misc
       aeson
     , base >=4.7 && <5
     , bytestring
+    , concur-core
     , concur-replica
     , containers
     , free >=4.12
@@ -189,6 +169,7 @@ executable concur-replica-multi-entry
       aeson
     , base >=4.7 && <5
     , bytestring
+    , concur-core
     , concur-replica
     , containers
     , free >=4.12
@@ -214,6 +195,7 @@ executable concur-replica-routing
       aeson
     , base >=4.7 && <5
     , bytestring
+    , concur-core
     , concur-replica
     , containers
     , free >=4.12
@@ -238,6 +220,7 @@ executable concur-replica-select
       aeson
     , base >=4.7 && <5
     , bytestring
+    , concur-core
     , concur-replica
     , containers
     , free >=4.12
@@ -262,6 +245,7 @@ executable concur-replica-svg
       aeson
     , base >=4.7 && <5
     , bytestring
+    , concur-core
     , concur-replica
     , containers
     , free >=4.12
@@ -286,6 +270,7 @@ executable concur-replica-website
       aeson
     , base >=4.7 && <5
     , bytestring
+    , concur-core
     , concur-replica
     , containers
     , free >=4.12

@@ -2,6 +2,7 @@
 
 module Main where
 
+import Concur.Core (Widget)
 import Concur.Replica
 import Data.Maybe
 import Data.Text (Text)
@@ -9,7 +10,7 @@ import Replica.VDOM (HTML)
 
 import Prelude hiding (div)
 
-selectApp :: Maybe Text -> UI HTML a
+selectApp :: Maybe Text -> Widget HTML a
 selectApp mSelected = do
   newSelection <- div []
     [ select [onChange]
@@ -26,4 +27,4 @@ selectApp mSelected = do
     eventToText = targetValue . target
 
 main :: IO ()
-main = runDefault 3030 "Select" (\_ -> selectApp Nothing)
+main = runDefault 8080 "Select" (\_ -> selectApp Nothing)
