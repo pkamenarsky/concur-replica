@@ -1,4 +1,3 @@
-{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE DeriveFunctor #-}
 
@@ -6,8 +5,8 @@ module Concur.Replica.UI
   ( UI
   , Step(..)
   , mapView
-  , orr
   -- , (<**>)
+  , orr
   -- , andd
   , view
   , liftSTM
@@ -20,12 +19,7 @@ import Control.Applicative (Alternative, (<|>), empty)
 import Control.Concurrent.STM (STM, retry, atomically)
 import Control.Monad (ap)
 
-import qualified Data.Map as M
 import Data.Maybe (fromMaybe)
-
-import           Replica.VDOM                 (Attrs, Attr(AText, ABool, AEvent, AMap), HTML, Namespace, VDOM(VNode, VLeaf, VText))
-
-import           Debug.Trace
 
 data Step a = Block { runStep :: STM a } | Step { runStep :: STM a }
   deriving Functor
@@ -50,53 +44,34 @@ instance Alternative Step where
 
 --------------------------------------------------------------------------------
 
-removeEvents :: VDOM -> VDOM
-removeEvents (VNode e attrs ns chs) = VNode e (removeEventsA attrs) ns chs
-removeEvents (VLeaf e attrs ns) = VLeaf e (removeEventsA attrs) ns
-removeEvents n = n
-
-removeEventsA :: Attrs -> Attrs
-removeEventsA attrs = M.fromList
-  [ ( k
-    , case v of
-        AMap m -> AMap $ removeEventsA m
-        _ -> v
-    )
-  | (k, v) <- M.toList attrs
-  , not (isEvent v)
-  ]
-  where
-    isEvent (AEvent _) = True
-    isEvent _ = False
-
 data UI v a = UI (Maybe v) (Step (Either a (UI v a)))
 
-carry :: Maybe HTML -> UI HTML a -> UI HTML a
-carry v (UI v' ui) = UI (v' <|> fmap (removeEvents <$>) v) ui
+carry :: Maybe v -> UI v a -> UI v a
+carry v (UI v' ui) = UI (v' <|> v) ui
 
 mapView :: Monoid u => (u -> v) -> UI u a -> UI v a
 mapView f (UI v ui) = UI (Just $ f $ fromMaybe mempty v) (fmap (mapView f) <$> ui)
 
-instance Functor (UI HTML) where
+instance Functor (UI v) where
   fmap f (UI v ui) = UI v $ do
     r <- ui
     case r of
       Left a    -> pure $ Left (f a)
       Right ui' -> pure $ Right (f <$> carry v ui')
 
-instance Applicative (UI HTML) where
-  pure a = UI Nothing (pure $ Left a)
+instance Monoid v => Applicative (UI v) where
+  pure a = UI mempty (pure $ Left a)
   (<*>)  = ap
 
-instance Monad (UI HTML) where
+instance Monoid v => Monad (UI v) where
   UI v ui >>= f = UI v $ do
     r <- ui
     case r of
       Left a    -> pure $ Right (carry v (f a))
       Right ui' -> pure $ Right (carry v ui' >>= f)
 
-instance Alternative (UI HTML) where
-  empty = UI Nothing (Block retry)
+instance Monoid v => Alternative (UI v) where
+  empty = UI mempty (Block retry)
   x@(UI fv _) <|> y@(UI av _) = UI (fv <> av) (run x (<|> y) <|> run y (x <|>))
     where
       run (UI v ui) alt = do
@@ -107,19 +82,19 @@ instance Alternative (UI HTML) where
 
 -- -- | Parallel applicative composition
 -- infixl 4 <**>
--- (<**>) :: UI HTML (a -> b) -> UI HTML a -> UI HTML b
--- x@(UI fv _) <**> y@(UI av _) = UI (fv <> av) (run x (<**> y) (<*> y) (\v -> (v <>)) <|> run y (x <**>) (x <*>) (\v -> (<> v)))
+-- (<**>) :: Monoid v => UI v (a -> b) -> UI v a -> UI v b
+-- x@(UI fv _) <**> y@(UI av _) = UI (fv <> av) (run x (<**> y) (<*> y) <|> run y (x <**>) (x <*>))
 --   where
---     run (UI v ui) altui altf altv = do
+--     run (UI v ui) alt parap = do
 --       r <- ui
 --       case r of
---         Left a    -> pure $ Right $ mapView (altv $ fmap removeEvents $ fromMaybe mempty v) $ altf (pure a)
---         Right ui' -> pure $ Right $ altui (carry v ui')
+--         Left a    -> pure $ Right $ parap (pure a)
+--         Right ui' -> pure $ Right $ alt (carry v ui')
 
-orr :: [UI HTML a] -> UI HTML a
+orr :: Monoid v => [UI v a] -> UI v a
 orr = foldr (<|>) empty
 
--- andd :: [UI HTML a] -> UI HTML [a]
+-- andd :: Monoid v => [UI v a] -> UI v [a]
 -- andd = foldr (\a b -> (:) <$> a <**> b) (pure [])
 
 view :: v -> UI v a

@@ -13,7 +13,7 @@ import qualified Concur.Replica.UI            as UI
 import qualified Data.Text                    as T
 import qualified Data.Map                     as M
 
-import           Replica.VDOM                 (Attrs, Attr(AText, ABool, AEvent, AMap), HTML, Namespace, VDOM(VNode, VLeaf, VText))
+import           Replica.VDOM                 (Attr(AText, ABool, AEvent, AMap), HTML, Namespace, VDOM(VNode, VText))
 
 el :: T.Text -> [Props a] -> [UI HTML a] -> UI HTML a
 el = elWithNamespace Nothing
